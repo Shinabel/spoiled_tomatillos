@@ -1,5 +1,5 @@
 
-** Usability Study Information
+## Usability Study Information
 - Individual data is located in folders LASTNAME_Data
 - UI designs show our ui templates we developed for the usability study 
 - Aggregate_data.xlsx and web ui spreadsheet is the combined data for the group
