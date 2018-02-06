@@ -10,14 +10,14 @@ pipeline {
    stage('Build') {
     steps {
      echo "Building"
-     sh 'mvn compile -f projectcode/pom.xml'
-     sh 'mvn package -f projectcode/pom.xml'
+     sh 'mvn compile -f projectcode/cs4500-spring2018-project/pom.xml'
+     sh 'mvn package -f projectcode/cs4500-spring2018-project/pom.xml'
     }
    }
    stage('Test'){
     steps {
      echo "Testing"
-     sh 'mvn test -f projectcode/pom.xml'
+     sh 'mvn test -f projectcode/cs4500-spring2018-project/pom.xml'
     }
    }
  }
