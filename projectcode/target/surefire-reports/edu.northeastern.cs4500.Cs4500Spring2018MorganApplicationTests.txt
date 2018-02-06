@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: edu.northeastern.cs4500.Cs4500Spring2018MorganApplicationTests
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 18.358 sec - in edu.northeastern.cs4500.Cs4500Spring2018MorganApplicationTests
