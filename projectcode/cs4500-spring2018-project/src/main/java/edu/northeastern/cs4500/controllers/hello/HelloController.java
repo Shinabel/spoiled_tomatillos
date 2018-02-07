@@ -15,18 +15,18 @@ public class HelloController {
 	
 	@RequestMapping("/api/hello/string")
 	public String sayHello() {
-		return "Hello Matt Morgan!";
+		return "Hello team 53!";
 	}
 	
 	@RequestMapping ( "api/hello/object" )
 	public HelloObject sayHelloObject() {
-	HelloObject obj = new HelloObject ( "Hello Matt Morgan!" ) ;
+	HelloObject obj = new HelloObject ( "Hello team 53!" ) ;
 	return obj;
 	}
 	
 	@RequestMapping("/api/hello/insert")
 	public HelloObject insertHelloObject() {
-	HelloObject obj = new HelloObject("Hello Matt Morgan!");
+	HelloObject obj = new HelloObject("Hello team 53!");
 	helloRepository.save(obj);
 	return obj;
 	}
