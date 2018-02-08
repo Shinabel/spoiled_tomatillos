@@ -6,3 +6,6 @@ Project repository for team 53
 [Jenkins link](http://ec2-18-221-236-132.us-east-2.compute.amazonaws.com:8080/)
 
 [hello world app](http://ec2-18-220-171-46.us-east-2.compute.amazonaws.com:8080/)
+
+## MYSQL endpoint:
+cs4500-spring2018-morgan.clvsn19ktapw.us-east-2.rds.amazonaws.com
