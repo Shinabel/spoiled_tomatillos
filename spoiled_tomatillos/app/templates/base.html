@@ -1,0 +1,14 @@
+<html>
+    <head>
+      {% if title %}
+      <title>{{ title }} - CS4500</title>
+      {% else %}
+      <title>Welcome to CS4500</title>
+      {% endif %}
+    </head>
+    <body>
+        <div>CS4500: <a href="/index">Home</a></div>
+        <hr>
+        {% block content %}{% endblock %}
+    </body>
+</html>
