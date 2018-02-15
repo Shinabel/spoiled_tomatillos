@@ -1,0 +1,8 @@
+{% extends "search.html" %}
+
+{% block content %}
+{% for movie in allmovies %}
+   <p>{{ movie.title }}</p>
+   <p>{{ movie.year }}</p>
+{% endfor %}
+{% endblock %}
