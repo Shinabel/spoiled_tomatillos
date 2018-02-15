@@ -21,10 +21,16 @@ def index():
     ]
     return render_template('index.html', title='Home', user=user, posts=posts)
 
-#route for the search method
+#route for the search method (so far we can search movies)
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     if request.method == "POST":
-        results = title_basic.query.filter(title_basic.title.like('%' + request.form['search'] + '%')).all()
-        return render_template("results.html", allmovies=results)
+        #the movies with titles like the string provided
+        results = title_basic.query.filter(title_basic.title.like('%' + str(request.form['search']) + '%')).all()
+        data = []
+        for r in results:
+            #format the result, ensuring properties are strings
+            data.append(str(r.title) + ' (' + str(r.year) + ')')
+
+        return render_template("search.html", allmovies=data)
     return render_template('search.html')

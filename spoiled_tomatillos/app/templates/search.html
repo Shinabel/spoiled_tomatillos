@@ -1,30 +1,33 @@
 {% extends "index.html" %}
 
 {% block content %}
-<div class="container">
-	<div class="row">
-        <div class="col-md-6">
-    		<h2>Search for a Movie</h2>
-            <div id="custom-search-input">
-                <div class="input-group col-md-12">
-                    <form action="/search" method=post>
-                    <input type="text" class="form-control input-lg" name="search"
-                           value="{{ request.form.search}}" placeholder="Movie" />
-                    <span class="input-group-btn">
-                        <button class="btn btn-info btn-lg" type="submit">
-                            <i class="glyphicon glyphicon-search"></i>
-                        </button>
-                    </span>
-                        </form>
-                </div>
-            </div>
+<center>
+    <center> <div class="container"> 
+        <div class="row"> 
+                <h2>Search for a Movie</h2> 
+                <form action="search" action="/search" method=post>
+                <div id="custom-search-input"> 
+                    <div class="input-group col-md-12"> 
+                        <input type="text" class="form-control input-lg" placeholder="Buscar" name="search" value="{{ request.form.search}}"/> 
+                        <span class="input-group-btn"> 
+                            <button class="btn btn-info btn-lg" type="submit"> 
+                                <i class="glyphicon glyphicon-search"></i> 
+                            </button> 
+                        </span> 
+                    </div> 
+                </div> 
+                </form>
         </div>
-	</div>
-</div>
-{% for message in get_flashed_messages() %}
-<div class=flash>
-    {{ message }}
-</div>
-{% endfor %}
+         </div> 
+    {% for message in get_flashed_messages() %}
+    <div class=flash>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% for m in allmovies %}
+        <div class="row text-center">
+            <div class="col-*-*">{{ m }}</div>
+        </div>
+    {% endfor %}
+</center>
 {% endblock %}
-
