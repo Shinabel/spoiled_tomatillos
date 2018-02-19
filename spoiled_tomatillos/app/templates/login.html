@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<body>
+	<header>
+		<div class="cotainter page-title">
+			<a href="#">
+				<h1>Spoiled Tomatillos</h1>
+			</a>
+		</div>
+	</header>
+
+	<main>
+		<form action="login" action="/login" method="post">
+			<div class="login-page">
+				<form class="login-form">
+					<div class="login-input" validData="valid email is required: team53@husky.neu.edu">
+						<input type="text" placeholder="username">
+					</div>
+
+					<div class="password-input" validData ="valid password is required">
+						<input type="password" placeholder="password">
+					</div>
+
+					<div class="container-login-button">
+						<button class="login-button">
+							login
+						</button>
+					</div>
+
+					<div class="text-center create-account">
+						<p class="message">Does not have an account? <a href="#">Create an account</a></p>
+					</div>
+
+					<div class="text-center forgot">
+						<span class="txt1">
+							Forgot
+						</span>
+						<a class="user-password" href="#">
+							Username / Password?
+						</a>
+					</div>
+				</form>
+			</div>
+		</form>
+	</main>
+</body>
+
+{% endblock %}

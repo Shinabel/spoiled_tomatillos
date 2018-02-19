@@ -1,8 +1,63 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Hi, {{ user.username }}!</h1>
-    {% for post in posts %}
-    <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
-    {% endfor %}
+<body>
+  <div id="shell">
+    <div id="header">
+      <h1 id="logo"><a href="#">Spoiled Tomatillos</a></h1>
+      <!--
+      <div class="social"> <span>FOLLOW US ON:</span>
+        <ul>
+          <li><a class="facebook" href="#">facebook</a></li>
+        </ul>
+      </div>
+      !-->
+      <div id="search">
+        <form action="#" method="get" accept-charset="utf-8">
+          <label for="search-field">SEARCH</label>
+          <input type="text" name="search field" placeholder="Enter movie search here"/>
+          <input type="submit" value="enter" class="search-button" />
+        </form>
+      </div>
+    </div>
+  </div>
+  <div id="main">
+    <div id="content">
+      <div class="box">
+        <div class="head">
+          <h2>Recommended</h2>
+          <p class="text-right"><a href="#">See all</a></p>
+        </div>
+        <div class="movie">
+          <!-- Movie info Possibly use for loop to iterate through!-->
+          <% movie information %>
+        </div>
+        
+        <div class="cl">&nbsp;</div>
+      </div>
+      <div class="box">
+        <div class="head">
+          <h2>TOP RATED</h2>
+          <p class="text-right"><a href="#">See all</a></p>
+        </div>
+        <div class="movie">
+          <!-- Movie info Possibly use for loop to iterate through!-->
+                    <% movie information %>
+        </div>
+        <div class="cl">&nbsp;</div>
+      </div>
+      <div class="box">
+        <div class="head">
+          <h2>MOST COMMENTED</h2>
+          <p class="text-right"><a href="#">See all</a></p>
+        </div>
+        <div class="movie">
+          <!-- Movie info Possibly use for loop to iterate through!-->
+          <% movie information %>
+        </div>
+        <div class="cl">&nbsp;</div>
+      </div>
+    </div>
+  </div>
+</body>
 {% endblock %}

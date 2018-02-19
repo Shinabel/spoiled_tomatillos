@@ -2,6 +2,7 @@ from flask import render_template
 from flask import request
 
 from app import app
+from app.forms import LoginForm
 from app.dbobjects import title_basic
 
 
@@ -34,3 +35,13 @@ def search():
 
         return render_template("search.html", allmovies=data)
     return render_template('search.html')
+
+#route for the login URL that creates a form and passes it to the template for rendering
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+  form = LoginForm()
+  if form.validate_on_submit():
+    flash('Login requested for user {}, remember_me={}'.format(
+      form.username.data, form.remember_me.data))
+    return redirect(url_for('search'))
+  return render_template('login.html', title='Sign In', form=form)
