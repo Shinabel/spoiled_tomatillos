@@ -1,6 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
+<!DOCTYPE html>
+<html lang="en" ng-app="TestApp">
+<head> 
+  <script
+  src="http://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+  <script> 
+    $(function(){
+      $("#search").load("{{ url_for('search') }}"); 
+    });
+  </script> 
+</head> 
+
 <body>
   <div id="shell">
     <div id="header">
@@ -13,11 +27,7 @@
       </div>
       !-->
       <div id="search">
-        <form action="#" method="get" accept-charset="utf-8">
-          <label for="search-field">SEARCH</label>
-          <input type="text" name="search field" placeholder="Enter movie search here"/>
-          <input type="submit" value="enter" class="search-button" />
-        </form>
+        <!-- import search.html!-->
       </div>
     </div>
   </div>
@@ -37,12 +47,12 @@
       </div>
       <div class="box">
         <div class="head">
-          <h2>RECOMMENDATiON</h2>
+          <h2>RECOMMENDATION</h2>
           <p class="text-right"><a href="#">See all</a></p>
         </div>
         <div class="movie">
           <!-- Movie info Possibly use for loop to iterate through!-->
-                    <% movie information %>
+          <% movie information %>
         </div>
         <div class="cl">&nbsp;</div>
       </div>
@@ -60,4 +70,5 @@
     </div>
   </div>
 </body>
+</html>
 {% endblock %}

@@ -1,11 +1,11 @@
-{% extends "index.html" %}
-
+<p>
 {% block content %}
+<body>
 <center>
-    <center> <div class="container"> 
+    <div class="container"> 
         <div class="row"> 
-                <h2>Search for a Movie</h2> 
-                <form action="search" action="/search" method=post>
+            <h2>Search for a Movie</h2> 
+            <form action="search" action="/" method=post>
                 <div id="custom-search-input"> 
                     <div class="input-group col-md-12"> 
                         <input type="text" class="form-control input-lg" placeholder="Buscar" name="search" value="{{ request.form.search}}"/> 
@@ -16,18 +16,21 @@
                         </span> 
                     </div> 
                 </div> 
-                </form>
+            </form>
         </div>
-         </div> 
     {% for message in get_flashed_messages() %}
     <div class=flash>
         {{ message }}
     </div>
     {% endfor %}
     {% for m in allmovies %}
-        <div class="row text-center">
-            <div class="col-*-*">{{ m }}</div>
-        </div>
+    <div class="row text-center">
+        <div class="col-*-*">{{ m }}</div>
+    </div>
     {% endfor %}
+         </div> 
 </center>
+
+</body>
+</p>
 {% endblock %}

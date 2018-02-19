@@ -1,5 +1,4 @@
-from flask import render_template
-from flask import request
+from flask import render_template, request, current_app
 
 from app import app
 from app.forms import LoginForm
@@ -9,18 +8,8 @@ from app.dbobjects import title_basic
 @app.route('/')
 @app.route('/index')
 def index():
-    user = {'username': 'Veronica'}
-    posts = [
-        {
-            'author': {'username': 'Matt'},
-            'body': 'Beautiful day in Boston!'
-        },
-        {
-            'author': {'username': 'Jay'},
-            'body': 'The Avengers movie was so cool!'
-        }
-    ]
-    return render_template('index.html', title='Home', user=user, posts=posts)
+    print current_app.root_path
+    return render_template('index.html')
 
 #route for the search method (so far we can search movies)
 @app.route('/search', methods=['GET', 'POST'])
