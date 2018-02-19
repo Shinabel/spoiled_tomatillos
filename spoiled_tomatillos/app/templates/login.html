@@ -5,7 +5,7 @@
 <body>
 	<header>
 		<div class="cotainter page-title">
-			<a href="#">
+			<a href="/index">
 				<h1>Spoiled Tomatillos</h1>
 			</a>
 		</div>
@@ -13,35 +13,35 @@
 
 	<main>
 		<form action="login" action="/login" method="post">
-			<div class="login-page">
-				<form class="login-form">
-					<div class="login-input" validData="valid email is required: team53@husky.neu.edu">
-						<input type="text" placeholder="username">
-					</div>
+			{{ form.hidden_tag() }}
+			<p>
+				{{ form.username.label }}<br>
+				{{ form.username(size=32) }}<br>
+				{% for error in form.username.errors %}
+				<span style="color: red;">[{{ error }}]</span>
+				{% endfor %}
+			</p>
+			<p>
+				{{ form.password.label }}<br>
+				{{ form.password(size=32) }}<br>
+				{% for error in form.password.errors %}
+				<span style="color: red;">[{{ error }}]</span>
+				{% endfor %}
+			</p>
+			<p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+			<p>{{ form.submit() }}</p>
 
-					<div class="password-input" validData ="valid password is required">
-						<input type="password" placeholder="password">
-					</div>
+			<div class="text-center create-account">
+				<p class="message">Does not have an account? <a href="#">Create an account</a></p>
+			</div>
 
-					<div class="container-login-button">
-						<button class="login-button">
-							login
-						</button>
-					</div>
-
-					<div class="text-center create-account">
-						<p class="message">Does not have an account? <a href="#">Create an account</a></p>
-					</div>
-
-					<div class="text-center forgot">
-						<span class="txt1">
-							Forgot
-						</span>
-						<a class="user-password" href="#">
-							Username / Password?
-						</a>
-					</div>
-				</form>
+			<div class="text-center forgot">
+				<span class="txt1">
+					Forgot
+				</span>
+				<a class="user-password" href="#">
+					Username / Password?
+				</a>
 			</div>
 		</form>
 	</main>
