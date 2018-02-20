@@ -16,5 +16,5 @@ class RegistrationForm(Form):
 		validators.DataRequired(),
 		validators.EqualTo('confirm', message='Passwords must match')
 		])
-	confirm = PasswordField('Repeat Password')
-	accept_tos = BooleanField('I accept the site rules', [validators.Required()])
+	confirm = PasswordField('Confirm Password')
+	accept_tos = BooleanField('I acknowledge that I have read and fully understand the terms and conditions of the site', [validators.Required()])
