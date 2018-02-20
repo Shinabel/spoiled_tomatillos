@@ -32,7 +32,7 @@
 			<p>{{ form.submit() }}</p>
 
 			<div class="text-center create-account">
-				<p class="message">Does not have an account? <a href="#">Create an account</a></p>
+				<p class="message">Does not have an account? <a href="{{ url_for('register') }}">Create an account</a></p>
 			</div>
 
 			<div class="text-center forgot">
@@ -40,6 +40,7 @@
 					Forgot
 				</span>
 				<a class="user-password" href="#">
+					<!-- need to add a way to find out username/password in database !-->
 					Username / Password?
 				</a>
 			</div>
