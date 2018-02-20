@@ -8,7 +8,7 @@ from app.dbobjects import title_basic
 @app.route('/')
 @app.route('/index')
 def index():
-    print current_app.root_path
+    #print current_app.root_path
     return render_template('index.html')
 
 #route for the search method (so far we can search movies)
@@ -22,8 +22,8 @@ def search():
             #format the result, ensuring properties are strings
             data.append(str(r.title) + ' (' + str(r.year) + ')')
 
-            return render_template("search.html", allmovies=data)
-            return render_template('search.html')
+        return render_template("search.html", allmovies=data)
+    return render_template('search.html')
 
 #route for the login URL that creates a form and passes it to the template for rendering
 @app.route('/login', methods=['GET', 'POST'])
@@ -41,7 +41,7 @@ def register():
     if request.method == 'POST' and form.validate():
         user = User(form.username.data, form.email.data,
             form.password.data)
-        db_session.add(user)
-        flash('Thanks for registering')
+        db_session.add(user) #need db to store info
+        flash('Registration Succeeded')
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
