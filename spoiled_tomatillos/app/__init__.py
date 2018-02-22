@@ -15,3 +15,4 @@ app.config['DEBUG']=True
 db = SQLAlchemy(app)
 
 from app import routes
+
