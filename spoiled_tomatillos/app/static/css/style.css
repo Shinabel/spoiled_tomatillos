@@ -1,3 +1,16 @@
+html {
+    background-color: #000000;
+}
+
+#
+
+.head h2{
+  margin: 10px;
+  font-size: 30px;
+}
+
+/*////////////////////////////////////////////////////////////////////////
+[search page]*/
 
 #custom-search-input{
     padding: 3px;
@@ -58,3 +71,6 @@ body { margin: 50px; text-align: center; font-family: 'Open Sans', sans-serif; b
 em { font-style: italic; }
 h1 { font-size: 24px; margin-bottom: 25px; font-weight: bold; text-transform: uppercase; }
 h2 { font-size: 16px; margin-bottom: 15px;}
+
+
+

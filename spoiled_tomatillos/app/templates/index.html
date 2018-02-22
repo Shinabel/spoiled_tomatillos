@@ -8,6 +8,10 @@
   src="http://code.jquery.com/jquery-3.3.1.min.js"
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
   crossorigin="anonymous"></script>
+
+  <!-- style !-->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
+
   <script> 
     $(function(){
       $("#search").load("{{ url_for('search') }}"); 

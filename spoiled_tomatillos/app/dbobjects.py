@@ -56,6 +56,15 @@ class ratings(db.Model):
         movieId = db.Column('tconst', db.Unicode, primary_key=True)
         numVotes = db.Column('numVotes', db.Integer)
 
+class user_info(db.Model):
+        __tablename__ = 'userinformation'
+        __table_args__ = {'extend_existing': True}
+
+        username = db.Column('username', db.Unicode, primary_key=True)
+        email = db.Column('email', db.Unicode)
+        password = db.Column('password', db.Unicode)
+
+
 
 
 

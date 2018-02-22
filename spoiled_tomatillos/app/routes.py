@@ -1,8 +1,9 @@
-from flask import render_template, request, current_app
+from flask import render_template, flash, redirect, url_for, request, current_app
 
 from app import app
 from app.forms import LoginForm, RegistrationForm
-from app.dbobjects import title_basic
+from app.dbobjects import title_basic, user_info
+from app.models import User
 
 
 @app.route('/')
@@ -30,18 +31,19 @@ def search():
 def login():
   form = LoginForm()
   if form.validate_on_submit():
+    # need something like -> user_info.add(user) with user defined.
     flash('Login requested for user {}, remember_me={}'.format(
       form.username.data, form.remember_me.data))
-    return redirect(url_for('search'))
+    return redirect(url_for('index'))
   return render_template('login.html', title='Sign In', form=form)
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
-        user = User(form.username.data, form.email.data,
-            form.password.data)
-        db_session.add(user) #need db to store info
-        flash('Registration Succeeded')
+        user = User(form.username.data, form.email.data, form.password.data)
+        #user_info.add(user) need to find a way to add
+        flash('Registration Succeeded: ' + user.username)
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
