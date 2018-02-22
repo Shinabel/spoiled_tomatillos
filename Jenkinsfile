@@ -10,6 +10,7 @@ pipeline {
    stage('Build') {
     steps {
      echo "Linting"
+     sh 'ls'
     }
    }
    stage('Test'){
