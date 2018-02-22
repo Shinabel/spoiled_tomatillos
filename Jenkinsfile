@@ -9,15 +9,14 @@ pipeline {
   stages {
    stage('Build') {
     steps {
-     echo "Building"
-     sh 'mvn compile -f projectcode/cs4500-spring2018-project/pom.xml'
-     sh 'mvn package -f projectcode/cs4500-spring2018-project/pom.xml'
+     echo "Linting"
+     sh 'ls'
     }
    }
    stage('Test'){
     steps {
      echo "Testing"
-     sh 'mvn test -f projectcode/cs4500-spring2018-project/pom.xml'
+//     sh 'python3 spoiled_tomatillos/app/tests/flaskr_tests.py'
     }
    }
  }
