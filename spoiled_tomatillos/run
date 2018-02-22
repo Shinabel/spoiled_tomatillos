@@ -1,0 +1,2 @@
+export FLASK_APP=cs4500.py
+flask run
