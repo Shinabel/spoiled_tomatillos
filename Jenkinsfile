@@ -10,7 +10,6 @@ pipeline {
    stage('Build') {
     steps {
      echo "Linting"
-     sh 'mvn compile -f projectcode/cs4500-spring2018-project/pom.xml'
     }
    }
    stage('Test'){
