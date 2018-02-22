@@ -1,12 +1,26 @@
-html {
-    background-color: #000000;
+* {
+  margin:10;
+  padding:0;
+  outline:10;
 }
-
-#
-
-.head h2{
-  margin: 10px;
-  font-size: 30px;
+body {
+  font-size:12px;
+  line-height:1.3;
+  font-family:Arial;
+  color:#595656;
+}
+a {
+  color:#595656;
+  text-decoration:underline;
+  cursor:pointer;
+}
+html {
+    background-color: #333333;
+}
+h2 {
+  font-size:10px;
+  color:#726c61;
+  font-weight:bold;
 }
 
 /*////////////////////////////////////////////////////////////////////////
