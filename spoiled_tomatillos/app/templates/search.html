@@ -1,33 +1,38 @@
-{% extends "index.html" %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
 
-{% block content %}
-<center>
-    <center> <div class="container"> 
-        <div class="row"> 
-                <h2>Search for a Movie</h2> 
-                <form action="search" action="/search" method=post>
-                <div id="custom-search-input"> 
-                    <div class="input-group col-md-12"> 
-                        <input type="text" class="form-control input-lg" placeholder="Movie Title" name="search" value="{{ request.form.search}}"/> 
-                        <span class="input-group-btn"> 
-                            <button class="btn btn-info btn-lg" type="submit"> 
-                                <i class="glyphicon glyphicon-search"></i> 
-                            </button> 
-                        </span> 
-                    </div> 
-                </div> 
-                </form>
-        </div>
-         </div> 
-    {% for message in get_flashed_messages() %}
-    <div class=flash>
-        {{ message }}
-    </div>
-    {% endfor %}
-    {% for m in allmovies %}
-        <div class="row text-center">
-            <div class="col-*-*">{{ m }}</div>
-        </div>
-    {% endfor %}
-</center>
+<p>
+    {% block content %}
+    <body>
+        <center>
+            <div class="container"> 
+                <div class="row"> 
+                    <h2>Search for a Movie</h2> 
+                    <form action="search" action="/" method=post>
+                        <div id="custom-search-input"> 
+                            <div class="input-group col-md-12"> 
+                                <input type="text" class="form-control input-lg" placeholder="Buscar" name="search" value="{{ request.form.search}}"/> 
+                                <span class="input-group-btn"> 
+                                    <button class="btn btn-info btn-lg" type="submit"> 
+                                        <i class="glyphicon glyphicon-search"></i> 
+                                    </button> 
+                                </span> 
+                            </div> 
+                        </div> 
+                    </form>
+                </div>
+                {% for message in get_flashed_messages() %}
+                <div class=flash>
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% for m in allmovies %}
+                <div class="row text-center">
+                    <div class="col-*-*">{{ m }}</div>
+                </div>
+                {% endfor %}
+             </div> 
+        </center>
+
+    </body>
+</p>
 {% endblock %}
