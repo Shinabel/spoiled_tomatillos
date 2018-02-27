@@ -5,7 +5,11 @@ from app.forms import LoginForm, RegistrationForm
 from app.dbobjects import title_basic, user_info
 from app.models import User
 
+
 @app.route('/')
+def main():
+    return redirect(url_for('login'))
+
 @app.route('/index')
 def index():
     #print current_app.root_path
