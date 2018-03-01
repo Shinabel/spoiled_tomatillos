@@ -57,7 +57,7 @@ class ratings(db.Model):
         numVotes = db.Column('numVotes', db.Integer)
 
 class user_info(db.Model):
-        __tablename__ = 'userinformation'
+        __tablename__ = 'user_info'
         __table_args__ = {'extend_existing': True}
 
         username = db.Column('username', db.Unicode, primary_key=True)
