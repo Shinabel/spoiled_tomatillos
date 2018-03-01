@@ -1,6 +1,7 @@
 from flask import render_template, flash, redirect, url_for, request, current_app
+from passlib.handlers.sha2_crypt import sha256_crypt
 
-from app import app
+from app import app, db
 from app.forms import LoginForm, RegistrationForm
 from app.dbobjects import title_basic, user_info
 from app.models import User
@@ -34,10 +35,15 @@ def search():
 def login():
   form = LoginForm()
   if form.validate_on_submit():
-    # need something like -> user_info.add(user) with user defined.
-    flash('Login requested for user {}, remember_me={}'.format(
-      form.username.data, form.remember_me.data))
-    return redirect(url_for('index'))
+    user = user_info.query.filter(user_info.username == form.username.data).first()
+    if user:
+        if sha256_crypt.verify(str(form.password.data), user.password):
+            flash('Login requested for user {}, remember_me={}'.format(
+                form.username.data, form.remember_me.data))
+            return redirect(url_for('index'))
+    else:
+        form.submit.error = 'Invalid username or password.'
+        render_template('login.html', title='Sign In', form=form)
   return render_template('login.html', title='Sign In', form=form)
 
 
@@ -46,7 +52,8 @@ def register():
     form = RegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
         user = User(form.username.data, form.email.data, form.password.data)
-        #user_info.add(user) need to find a way to add
+        db.session.add(user_info(username=user.username, email=user.email, password=user.password))
+        db.session.commit()
         flash('Registration Succeeded: ' + user.username)
         return redirect(url_for('login'))
     return render_template('register.html', form=form)

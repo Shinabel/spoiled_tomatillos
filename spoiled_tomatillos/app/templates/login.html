@@ -31,7 +31,9 @@
 			</p>
 			<p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
 			<p>{{ form.submit() }}</p>
-
+			{% if form.submit.error %}
+				<span style="color: red;">[{{ form.submit.error }}]</span>
+			{% endif %}
 			<div class="text-center create-account">
 				<p class="message">Does not have an account? <a href="{{ url_for('register') }}">Create an account</a></p>
 			</div>
