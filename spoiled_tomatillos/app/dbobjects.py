@@ -63,6 +63,22 @@ class user_info(db.Model):
         username = db.Column('username', db.Unicode, primary_key=True)
         email = db.Column('email', db.Unicode)
         password = db.Column('password', db.Unicode)
+        user_ID = db.Column('user_ID', db.Integer)
+
+
+class user_ratings(db.Model):
+        __tablename__ = 'user.ratings'
+        __table_args__ = {'extend_existing': True}
+
+        rating_ID = db.Column('rating_ID', db.Integer, primary_key=True)
+        user_ID = db.Column('user_ID', db.Integer, db.ForeignKey('user_info.user_ID'))
+        movieId = db.Column('tconst', db.Unicode, db.ForeignKey('title.basics.tconst'))
+        ratings = db.Column('ratings', db.Float)
+
+
+
+
+
 
 
 
