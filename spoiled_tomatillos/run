@@ -1,2 +1,4 @@
 export FLASK_APP=cs4500.py
+export APP_MAIL_USERNAME="spoiledtomatillos53@gmail.com"
+export APP_MAIL_PASSWORD="cs4500project"
 flask run

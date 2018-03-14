@@ -63,6 +63,9 @@ class user_info(db.Model):
         username = db.Column('username', db.Unicode, primary_key=True)
         email = db.Column('email', db.Unicode)
         password = db.Column('password', db.Unicode)
+        register_date = db.Column('register_date', db.DateTime, nullable=False)
+        confirmed = db.Column('confirmed', db.Boolean, nullable=False, default=False)
+        confirmed_date = db.Column('confirmed_date', db.DateTime)
 
 
 
