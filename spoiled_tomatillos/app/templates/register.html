@@ -1,15 +1,24 @@
-{% extends "base.html" %}
 {% from "_formhelpers.html" import render_field %}
 
-
 {% block content %}
-<div id="main">
+
+
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+      <title>Register</title>
+    </head>
+		</html>
+  
 <center>
   <body>
    <header>
-    <div class="cotainter page-title">
-     <a href="/index">
-      <h1>Spoiled Tomatillos</h1>
+    <div class="container page-title">
+      <h1>Register</h1>
     </a>
   </div>
 </header>
@@ -26,9 +35,12 @@
 
     </dl>
     <p><input type=submit value=Register></p>
+    <div class="cointainer login">
+      <a href="{{ url_for('login') }}">Login</a>
   </form>
 </main>
 </body>
 </center>
-</div>
+
 {% endblock %}
+
