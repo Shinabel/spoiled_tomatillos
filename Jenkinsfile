@@ -28,11 +28,12 @@ pipeline {
     }
     // Sonarqube sending project to Sonarqube server and starting analysis
     stage('SonarQube') {
-    agent {
+      agent {
         docker {
           image 'maven:3-alpine'
           args '-v /root/.2:/root/.m2'
         }
+      }
       steps {
         echo "-----------Starting SonarQube analysis-----------------"
         sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install -Dmaven.test.failure.ignore=true'
