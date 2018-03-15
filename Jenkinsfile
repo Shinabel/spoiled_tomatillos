@@ -35,9 +35,11 @@ pipeline {
         }
       }
       steps {
-        echo "-----------Starting SonarQube analysis-----------------"      
-        sh '(cd projectcode/cs4500-spring2018-project/ && mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install -Dmaven.test.failure.ignore=true)'
-        sh '(cd projectcode/cs4500-spring2018-project/ && mvn sonar:sonar -Dsonar.host.url=http://ec2-18-220-143-170.us-east-2.compute.amazonaws.com:9000/)'
+        echo "-----------Starting SonarQube analysis-----------------"
+        withSonarQubeEnv('SonarQube') {
+          sh '(cd projectcode/cs4500-spring2018-project/ && mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install -Dmaven.test.failure.ignore=true)'
+          sh '(cd projectcode/cs4500-spring2018-project/ && mvn sonar:sonar -Dsonar.host.url=http://ec2-18-220-143-170.us-east-2.compute.amazonaws.com:9000/)'
+        }  
       }
     }
     stage ('Quality') {
