@@ -6,13 +6,17 @@ from passlib.handlers.sha2_crypt import sha256_crypt
 from flask_login import login_user, logout_user, login_required, current_user
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, ResetForm, ChangePasswordForm
-from app.dbobjects import title_basic, user_info
+from app.dbobjects import title_basic, user_info, ratings, roles, actors, user_ratings
 from app.models import User
 
 from app.token import generate_confirmation_token, confirm_token
 from app.email import send_email
 
 from flask_login import login_user, logout_user, login_required, current_user
+
+#getting movie posters
+import requests
+from bs4 import BeautifulSoup
 
 @app.route('/')
 def main():
@@ -27,12 +31,13 @@ def index():
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     if request.method == "POST":
+        
         #the movies with titles like the string provided
         results = title_basic.query.filter(title_basic.title.like('%' + str(request.form['search']) + '%')).all()
         data = []
         for r in results:
             #format the result, ensuring properties are strings
-            data.append(str(r.title) + ' (' + str(r.year) + ')')
+            data.append({"title" : str(r.title) + ' (' + str(r.year) + ')', "id" : r.id})
 
         return render_template("search.html", allmovies=data)
     return render_template('search.html')
@@ -92,6 +97,55 @@ def register():
 def user_profile():
     user = current_user
     return render_template('user_profile.html', user=user)
+
+@app.route('/movie/<movie_id>', methods=['GET', 'POST'])
+def movie_page(movie_id):
+    if request.method == "POST":
+        if current_user.is_authenticated:
+            original_rating = user_ratings.query.filter(user_ratings.movieId == movie_id and user_ratings.user_ID == current_user).first()
+            if original_rating is None:
+                db.session.add(user_ratings(user_ID=current_user, movieId=movie_id, ratings=request.form['user-rating']))
+                db.session.commit()
+            else:
+                original_rating.ratings = request.form['user-rating']
+                db.session.commit()
+        else:
+            flash('You must be signed in to rate movies.')
+
+    movie = title_basic.query.filter_by(id=movie_id).first()
+    rating = ratings.query.filter_by(movieId=movie_id).first()
+
+    results = roles.query.filter_by(movieId=movie_id).all()
+    allActors = []
+    for r in results:
+        actor = actors.query.filter_by(id=r.personID).first()
+        allActors.append(actor.name)
+
+    userRatings = user_ratings.query.filter_by(movieId=movie_id).all()
+    counter = 0
+    sum = 0
+    for u in userRatings:
+        sum += u.ratings
+        counter += 1
+    if counter == 0:
+        user_rating = 0
+    else:
+        user_rating = sum / counter
+
+    base_url = "http://www.imdb.com/title/"
+    url = base_url + movie_id
+    response_data = requests.get(url).text[:]
+    soup = BeautifulSoup(response_data, 'html.parser')
+    image_link = soup.find("div", class_="poster")
+    if image_link is None:
+        image_link = "https://developersushant.files.wordpress.com/2015/02/no-image-available.png"
+    else:
+        image_link = image_link.find("img")['src']
+    movie_description = soup.find("div", class_="summary_text").get_text().strip()
+    if movie_description == "Add a Plot »":
+        movie_description = "No description."
+
+    return render_template('movie.html', movie=movie, image=image_link, desc=movie_description, allActors=allActors, rating = rating.numVotes, user_rating = user_rating)
 
 @app.route('/confirm/<token>')
 def confirm_email(token):

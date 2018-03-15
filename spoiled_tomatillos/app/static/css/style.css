@@ -42,7 +42,7 @@ html, body, .sidebar-nav, .content-posts {
 }
 
 body {
-    background: #edf1f5;
+    background: #D55121;
     font-family: Poppins, sans-serif;
 }
 
@@ -103,9 +103,9 @@ video, img {
 
 header {
     min-height: 50px;
-    background: #4F5467;
+    background: #184D68;
     font-size: 14px;
-    padding: 15px 130px 10px 370px;
+    padding: 15px 20px 10px 20px;
     position: fixed;
     top: 0;
     width: 100%;
@@ -127,7 +127,8 @@ header .fa {
 }
 
 header div {
-    float: right;
+    float: left;
+    font-size: 25px;
 }
 
 header .second-icon {
@@ -137,7 +138,7 @@ header .second-icon {
 header .menu-icon { margin-top:3px; }
 
 header .dropdown-menu, header .dropdown-menu a, header .dropdown-menu a:link, header .dropdown-menu a:focus, header .dropdown-menu a:visited {
-    color: #404040;
+    color: #184D68;
 }
 
 header .dropdown-menu {
@@ -176,7 +177,7 @@ header .badge {
     width: 200px;
     border-radius: 10px;
     border: 0px;
-    color: #404040;
+    color: #184D68;
     font-size: 13px;
     padding: 5px;
     padding-bottom: 3px;
@@ -190,6 +191,73 @@ header .badge {
     padding: 50px 10px 0px 10px;
     background: #ffffff;
     z-index: 99;
+}
+
+/* Add a black background color to the top navigation */
+.topnav {
+  display: inline-block;
+  background-color: #184D68;
+  overflow: hidden;
+}
+
+/* Style text inside nav bar*/
+.topnav p {
+  float: left;
+  color: #f2f2f2;
+  font-size: 25px;
+}
+
+.topnav .search {
+  float: left;
+  color: #f2f2f2;
+  font-size: 17px;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: right;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.center-form {
+  width: 40%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.input-lg {
+  height: 40px;
+}
+
+.btn-info {
+  background-color: #d55121;
+  border-color: #d55121;
+  -o-transition:.5s;
+  -ms-transition:.5s;
+  -moz-transition:.5s;
+  -webkit-transition:.5s;
+  transition:.5s;
+}
+
+.btn-info:hover {
+  background-color: #9a3b18;
+  border-color: #9a3b18;
 }
 
 
@@ -261,6 +329,12 @@ header .badge {
 
 .primary-content .container-posts {
     padding: 0 40px;
+}
+
+#main {
+  margin: 120px 40px 0px 40px;
+  padding: 30px 50px 30px 50px;
+  background-color: #ffffff;  
 }
 
 /*----------------------------------------------------------------
@@ -356,6 +430,72 @@ textarea.post-textarea {
     padding: 10px 0;
     border-bottom: 1px solid #eaeaea;
 }
+
+#prof-pic {
+    width: auto;
+    height: auto;
+    max-width: 500px;
+    max-height: 500px;
+}
+
+#movie-poster {
+  width: auto;
+  height: auto;
+  max-width: 300px;
+  max-height: 300px;
+}
+
+#poster {
+  float: left;
+  width: 30%;
+}
+
+#bio {
+  margin: 20px;
+  float: left;
+  width: 70%;
+}
+
+.clearfix {
+  clear: both;
+}
+
+#movie-title {
+  margin: 0px 0px 50px 0px;
+}
+
+.rating {
+  float:left;
+  width:300px;
+}
+.rating span { float:right; position:relative; }
+.rating span input {
+  position:absolute;
+  top:0px;
+  left:0px;
+  opacity:0;
+}
+.rating span label {
+  display:inline-block;
+  width:30px;
+  height:30px;
+  text-align:center;
+  color:#FFF;
+  background:#ccc;
+  font-size:30px;
+  margin-right:2px;
+  line-height:30px;
+  border-radius:50%;
+  -webkit-border-radius:50%;
+}
+.rating span:hover ~ span label,
+.rating span:hover label,
+.rating span.checked label,
+.rating span.checked ~ span label {
+  background:#F90;
+  color:#FFF;
+}
+
 
 
 /*----------------------------------------------------------------
