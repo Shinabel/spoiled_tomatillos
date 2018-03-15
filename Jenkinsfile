@@ -36,7 +36,7 @@ pipeline {
       }
       steps {
         echo "-----------Starting SonarQube analysis-----------------"
-        dir ('projectcode/cs4500-spring2018-project') {
+        dir ('projectcode/cs4500-spring2018-project/') {
           sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install -Dmaven.test.failure.ignore=true'
           sh 'mvn sonar:sonar -Dsonar.host.url=http://ec2-18-220-143-170.us-east-2.compute.amazonaws.com:9000/'
         }
