@@ -31,6 +31,7 @@ def index():
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     if request.method == "POST":
+        
         #the movies with titles like the string provided
         results = title_basic.query.filter(title_basic.title.like('%' + str(request.form['search']) + '%')).all()
         data = []
