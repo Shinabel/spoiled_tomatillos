@@ -5,7 +5,7 @@ import datetime
 from passlib.handlers.sha2_crypt import sha256_crypt
 from flask_login import login_user, logout_user, login_required, current_user
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, ResetForm
+from app.forms import LoginForm, RegistrationForm, ResetForm, ChangePasswordForm
 from app.dbobjects import title_basic, user_info
 from app.models import User
 
@@ -112,6 +112,7 @@ def resetPassword():
         db.session.commit()
 
         change_url = url_for('change_password', token=token, _external=True)
+
         html = render_template('reset.html',
                                username=user.email,
                                change_url=change_url)
@@ -124,10 +125,9 @@ def resetPassword():
     return render_template('reset_password.html', form=form)
 
 
-@app.route('/change_password', methods=['GET', 'POST'])
+@app.route('/reset_password/new/<token>', methods=['GET', 'POST'])
 def change_password(token):
 
-    token = generate_confirmation_token(user.email)
     email = confirm_token(token)
 
     user = user_info.query.filter(user_info.email == email).first_or_404()

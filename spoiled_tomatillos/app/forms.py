@@ -1,9 +1,9 @@
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, Form, validators
+from flask_wtf import Form
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, validators
 from wtforms.validators import DataRequired, Length, EqualTo, Email
 from app.dbobjects import user_info
 
-class LoginForm(FlaskForm):
+class LoginForm(Form):
 	username = StringField('Username', validators=[DataRequired()])
 	password = PasswordField('Password', validators=[DataRequired()])
 	remember_me = BooleanField('Remember Me')
@@ -25,7 +25,7 @@ class ResetForm(Form):
         'email',
         validators=[DataRequired(), Email(message=None), Length(min=6, max=255)])
 
-    def validate_on_submit(self):
+    def validate(self):
         initial_validation = super(ResetForm, self).validate()
         if not initial_validation:
             return False
