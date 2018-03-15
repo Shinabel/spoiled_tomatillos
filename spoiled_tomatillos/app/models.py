@@ -4,7 +4,7 @@ from app import app, db
 
 class User:
 
-	def __init__(self, username, email, password):
+	def __init__(self, username, email, password, confirmed):
 		self.id = id
 		self.username = username
 		self.email = email
