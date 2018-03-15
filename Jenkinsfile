@@ -23,7 +23,7 @@ pipeline {
       }
       steps {
         echo "-----------Executing python tests-----------------"
-        sh 'pytest --verbose --junit-xml test-reports/results.xml spoiled_tomatillos/app/tests/flaskr_tests.py'
+        sh 'pytest --verbose --junit-xml test-reports/results.xml'
       }
       post {
         always {
