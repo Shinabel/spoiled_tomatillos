@@ -66,6 +66,19 @@ class user_info(db.Model):
         register_date = db.Column('register_date', db.DateTime, nullable=False)
         confirmed = db.Column('confirmed', db.Boolean, nullable=False, default=False)
         confirmed_date = db.Column('confirmed_date', db.DateTime)
+        user_ID = db.Column('user_ID', db.Integer)
+
+
+class user_ratings(db.Model):
+        __tablename__ = 'user.ratings'
+        __table_args__ = {'extend_existing': True}
+
+        rating_ID = db.Column('rating_ID', db.Integer, primary_key=True)
+        user_ID = db.Column('user_ID', db.Integer, db.ForeignKey('user_info.user_ID'))
+        movieId = db.Column('tconst', db.Unicode, db.ForeignKey('title.basics.tconst'))
+        ratings = db.Column('ratings', db.Float)
+
+
 
 
 
