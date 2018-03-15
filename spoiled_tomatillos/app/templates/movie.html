@@ -1,1 +1,81 @@
+{% extends "base.html" %}
 
+{% block content %}
+
+
+<body>
+    <div class="clearfix" id="main">
+        <center id="movie-title">
+                <h1>{{ movie.title }}</h1>
+        </center>
+        <div class="row">
+            <div class="col-sm-4">
+                <img src="{{ image }}" alt="Can't load movie poster" id="movie-poster">
+            </div>
+    
+            <div class="col-sm-8">
+                <p>{{ desc }}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                {{ rating }} votes<br>
+                <div class="rating">
+                        <span><input type="radio" name="rating" id="str5" value="5"><label for="str5"></label></span>
+                        <span><input type="radio" name="rating" id="str4" value="4"><label for="str4"></label></span>
+                        <span><input type="radio" name="rating" id="str3" value="3"><label for="str3"></label></span>
+                        <span><input type="radio" name="rating" id="str2" value="2"><label for="str2"></label></span>
+                        <span><input type="radio" name="rating" id="str1" value="1"><label for="str1"></label></span>
+                </div>
+                {{ user_rating }} Spoiled Tomatillos rating
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-8">
+                Actors:
+                {% for a in allActors %}
+                <p>
+                    {{ a }}
+                </p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        // Check Radio-box
+        $(".rating input:radio").attr("checked", false);
+    
+        $('.rating input').click(function () {
+            $(".rating span").removeClass('checked');
+            $(this).parent().addClass('checked');
+        });
+    
+        $('input:radio').change(
+          function(){
+            var userRating = this.value;
+            post(window.location.href, userRating);
+        }); 
+    });
+
+    function post(path, parameters) {
+        var form = $('<form></form>');
+
+        form.attr("method", "post");
+        form.attr("action", path);
+        var field = $('<input></input>');
+        field.attr("type", "hidden");
+        field.attr("name", "user-rating");
+        field.attr("value", parameters);
+        form.append(field);
+
+        // The form needs to be a part of the document in
+        // order for us to be able to submit it.
+        $(document.body).append(form);
+        form.submit();
+    }
+</script>
+{% endblock %}

@@ -11,21 +11,33 @@
             <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,600,700" rel="stylesheet">
             <link rel="stylesheet" type="text/css" href="../static/css/style.css">
       {% if title %}
-      <title>{{ title }} - CS4500</title>
+      <title>{{ title }}</title>
       {% else %}
-      <title>Welcome to CS4500</title>
+      <title>Spoiled Tomatillos</title>
       {% endif %}
     </head>
     <body>
-      <div>
-        <a href="{{ url_for('index') }}">Home</a>&nbsp
-        <a href="{{ url_for('login') }}">Login</a>&nbsp
-        <a href="{{ url_for('register') }}">Register</a>&nbsp
-        <a href="{{ url_for('user_profile')}}">User Profile</a>
+      <header class="topnav">
+        <div>
+            Spoiled Tomatillos
         </div>
+        <form class="center-form" action="/search" method=post>
+            <div class="input-group">
+            <input type="text" class="form-control input-lg" placeholder="Search movies, users..." name="search" value="{{ request.form.search }}"/>
+            <span class="input-group-btn">
+                <button class="btn btn-info btn-lg" type="submit">
+                    <i class="glyphicon glyphicon-search"></i>
+                </button>
+            </span>
+            </div>
+        </form>
+        <a href="{{ url_for('logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i></a>&nbsp
+        <a href="#"><i class="fa fa-cog" aria-hidden="true"></i></a>&nbsp
+        <a href="{{ url_for('user_profile')}}"><i class="fa fa-user" aria-hidden="true"></i></a>&nbsp
+        <a href="{{ url_for('index') }}"><i class="fa fa-home" aria-hidden="true"></i></a>&nbsp
+    </header>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
-        <hr>
         <ul>
             {% for message in messages %}
             <li>{{ message }}</li>
