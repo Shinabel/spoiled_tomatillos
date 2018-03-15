@@ -6,7 +6,7 @@ from passlib.handlers.sha2_crypt import sha256_crypt
 from flask_login import login_user, logout_user, login_required, current_user
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, ResetForm, ChangePasswordForm
-from app.dbobjects import title_basic, user_info, ratings, roles, actors, user_ratings
+from app.dbobjects import title_basic, user_info, ratings, roles, actors, user_ratings, crew
 from app.models import User
 
 from app.token import generate_confirmation_token, confirm_token
@@ -100,6 +100,12 @@ def user_profile():
 
 @app.route('/movie/<movie_id>', methods=['GET', 'POST'])
 def movie_page(movie_id):
+    current_user_rating = None
+
+    if current_user.is_authenticated:
+        current_user_rating_row = user_ratings.query.filter(user_ratings.movieId == movie_id and user_ratings.user_ID == current_user).first()
+        current_user_rating = current_user_rating_row.ratings
+
     if request.method == "POST":
         if current_user.is_authenticated:
             original_rating = user_ratings.query.filter(user_ratings.movieId == movie_id and user_ratings.user_ID == current_user).first()
@@ -115,11 +121,24 @@ def movie_page(movie_id):
     movie = title_basic.query.filter_by(id=movie_id).first()
     rating = ratings.query.filter_by(movieId=movie_id).first()
 
-    results = roles.query.filter_by(movieId=movie_id).all()
+    #getting all the actors in a movie
+    results = roles.query.filter_by(movieId=movie_id).filter_by(category='actor').all()
     allActors = []
     for r in results:
         actor = actors.query.filter_by(id=r.personID).first()
         allActors.append(actor.name)
+
+    #gettings directors for a movie
+    dir_result = crew.query.filter_by(movieId=movie_id).first()
+    director_id = dir_result.directors
+    director = actors.query.filter_by(id=director_id).first()
+    director_name = director.name
+
+    #gettings writers for a movie
+    write_result = crew.query.filter_by(movieId=movie_id).first()
+    writer_id = dir_result.writers
+    writer = actors.query.filter_by(id=director_id).first()
+    writer_name = writer.name
 
     userRatings = user_ratings.query.filter_by(movieId=movie_id).all()
     counter = 0
@@ -145,7 +164,9 @@ def movie_page(movie_id):
     if movie_description == "Add a Plot »":
         movie_description = "No description."
 
-    return render_template('movie.html', movie=movie, image=image_link, desc=movie_description, allActors=allActors, rating = rating.numVotes, user_rating = user_rating)
+    return render_template('movie.html', movie=movie, image=image_link, desc=movie_description, allActors=allActors,
+                           rating_count=rating.numVotes, user_rating = user_rating, current_user_rating=current_user_rating,
+                           rating=rating.average_rating, director_name=director_name, writer_name=writer_name)
 
 @app.route('/confirm/<token>')
 def confirm_email(token):
