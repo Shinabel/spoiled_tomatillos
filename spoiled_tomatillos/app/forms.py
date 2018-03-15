@@ -35,7 +35,7 @@ class ResetForm(Form):
             return False
         return True
 
-class ChangePasswordForm(Form):
+class ChangePasswordForm(FlaskForm):
 	password = PasswordField('New Password', [
 		validators.DataRequired(),
 		validators.EqualTo('confirm', message='Passwords must match')
