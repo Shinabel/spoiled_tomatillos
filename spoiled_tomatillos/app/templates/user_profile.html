@@ -1,19 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="en" ng-app="TestApp">
-<head>
-  <script
-  src="http://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
-
-  <!-- style !-->
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
 
 
 <body>
+
   <div id="shell">
     <div id="header">
       <center>
@@ -21,8 +12,8 @@
     </center>
 
 <section id="name_image">
-  <h1> Profile Name</h1>
-<img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="W3Schools.com">
+  <h1>User Name</h1>
+<img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="W3Schools.com" id="prof-pic">
 </section>
 
 <section id="bio">
@@ -43,5 +34,6 @@
   <h1>Groups</h1>
   <p class="text-left"><a href="#">See all</a></p>
 </section>
+</div>
 </body>
 {% endblock %}

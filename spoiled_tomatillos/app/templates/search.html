@@ -1,5 +1,4 @@
-<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
-{% extends "base.html" %}
+<link rel="stylesheet" type="text/css" href="../static/css/style.css">
 
 <p>
     {% block content %}
@@ -28,7 +27,7 @@
                 {% endfor %}
                 {% for m in allmovies %}
                 <div class="row text-center">
-                    <div class="col-*-*">{{ m }}</div>
+                    <div class="col-*-*"><a href="/movie/{{ m.id }}">{{ m.title }}</a></div>
                 </div>
                 {% endfor %}
              </div> 
