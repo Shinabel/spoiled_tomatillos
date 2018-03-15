@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>edu.northeastern.cs4500</groupId>
-	<artifactId>cs4500-spring2018-project</artifactId>
+	<artifactId>cs4500-spring2018-project-team53</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
-	<name>cs4500-spring2018-project</name>
+	<name>cs4500-spring2018-project-team53</name>
 	<description>Demo project for Spring Boot</description>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
