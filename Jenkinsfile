@@ -9,6 +9,7 @@ pipeline {
           docker {
             image 'frolvlad/alpine-python3'
           }
+        }
         steps {
           echo '-------------Executing build stage------------' 
         }
