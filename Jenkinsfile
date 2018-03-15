@@ -14,34 +14,38 @@ pipeline {
         echo '-------------Executing build stage------------' 
       }
     }
-    // Tests the application
+    // Tests the application and produces xml reports
     stage('Test'){
       agent {
         docker {
-          image 'frolvlad/alpine-python3'
+          image 'qnib/pytest'
         }
       }
       steps {
         echo "-----------Executing python tests-----------------"
-        sh 'python3 spoiled_tomatillos/app/tests/flaskr_tests.py'
+        sh 'pytest --verbose --junit-xml test-reports/results.xml spoiled_tomatillos/app/tests/flaskr_tests.py'
+      }
+      post {
+        always {
+          junit 'test-reports/results.xml'
+        }
       }
     }
     // Sonarqube sending project to Sonarqube server and starting analysis
     stage('SonarQube') {
       agent {
         docker {
-          image 'maven:3-alpine'
-          args '-v /root/.2:/root/.m2'
+          image 'zaquestion/sonarqube-scanner'
         }
       }
       steps {
         echo "-----------Starting SonarQube analysis-----------------"
         withSonarQubeEnv('SonarQube') {
-          sh '(cd projectcode/cs4500-spring2018-project/ && mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install -Dmaven.test.failure.ignore=true)'
-          sh '(cd projectcode/cs4500-spring2018-project/ && mvn sonar:sonar -Dsonar.host.url=http://ec2-18-220-143-170.us-east-2.compute.amazonaws.com:9000/)'
+          sh 'sonar-scanner'
         }  
       }
     }
+    // Running Sonarqube results through Quality Gate set up on server
     stage ('Quality') {
       agent {
         docker {
