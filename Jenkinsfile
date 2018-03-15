@@ -26,6 +26,44 @@ pipeline {
         sh 'python3 spoiled_tomatillos/app/tests/flaskr_tests.py'
       }
     }
+    // Sonarqube sending project to Sonarqube server and starting analysis
+    stage('SonarQube') {
+      agent {
+        docker {
+          image 'maven:3-alpine'
+          args '-v /root/.2:/root/.m2'
+        }
+      }
+      steps {
+        echo "-----------Starting SonarQube analysis-----------------"
+        withSonarQubeEnv('SonarQube') {
+          sh '(cd projectcode/cs4500-spring2018-project/ && mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install -Dmaven.test.failure.ignore=true)'
+          sh '(cd projectcode/cs4500-spring2018-project/ && mvn sonar:sonar -Dsonar.host.url=http://ec2-18-220-143-170.us-east-2.compute.amazonaws.com:9000/)'
+        }  
+      }
+    }
+    stage ('Quality') {
+      agent {
+        docker {
+          image 'maven:3-alpine'
+          args '-v /root/.2:/root/.m2'
+        }
+      }
+      steps {
+        echo "-----------Quality Gate Check-----------------"
+        sh 'sleep 30'
+        timeout(time: 10, unit: 'SECONDS') {
+          retry(5) {
+            script {
+              def qg = waitForQualityGate()
+              if (qg.status != 'OK') {
+                error "Pipeline aborted due to quality gate failure: ${qg.status}"
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
 
