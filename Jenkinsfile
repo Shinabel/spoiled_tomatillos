@@ -14,7 +14,7 @@ pipeline {
         echo '-------------Executing build stage------------' 
       }
     }
-    // Tests the application
+    // Tests the application and produces xml reports
     stage('Test'){
       agent {
         docker {
