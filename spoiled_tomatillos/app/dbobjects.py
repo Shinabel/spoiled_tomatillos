@@ -60,13 +60,27 @@ class user_info(db.Model):
         __tablename__ = 'user_info'
         __table_args__ = {'extend_existing': True}
 
-        username = db.Column('username', db.Unicode, primary_key=True)
+        user_ID = db.Column('user_ID', db.Integer,  primary_key=True)
+        username = db.Column('username', db.Unicode)
         email = db.Column('email', db.Unicode)
         password = db.Column('password', db.Unicode)
         register_date = db.Column('register_date', db.DateTime, nullable=False)
         confirmed = db.Column('confirmed', db.Boolean, nullable=False, default=False)
         confirmed_date = db.Column('confirmed_date', db.DateTime)
-        user_ID = db.Column('user_ID', db.Integer)
+        password_token = db.Column('password_token', db.Unicode)
+
+
+        def is_active(self):
+            return True
+
+        def get_id(self):
+            return self.user_ID
+
+        def is_authenticated(self):
+            return True
+
+        def is_anonymous(self):
+            return False
 
 
 class user_ratings(db.Model):

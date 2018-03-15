@@ -5,7 +5,7 @@ import datetime
 from passlib.handlers.sha2_crypt import sha256_crypt
 from flask_login import login_user, logout_user, login_required, current_user
 from app import app, db
-from app.forms import LoginForm, RegistrationForm
+from app.forms import LoginForm, RegistrationForm, ResetForm
 from app.dbobjects import title_basic, user_info
 from app.models import User
 
@@ -100,3 +100,57 @@ def confirm_email(token):
         flash('Account confirmed. Thanks!', 'success')
     return redirect(url_for('login'))
 
+@app.route('/reset_password',  methods=['GET', 'POST'])
+def resetPassword():
+    form = ResetForm(request.form)
+    if form.validate_on_submit():
+
+        user = user_info.query.filter(user_info.email == form.email.data).first()
+        token = generate_confirmation_token(user.email)
+
+        user.password_token = token
+        db.session.commit()
+
+        change_url = url_for('change_password', token=token, _external=True)
+        html = render_template('reset.html',
+                               username=user.email,
+                               change_url=change_url)
+        subject = "Reset your password"
+        send_email(user.email, subject, html)
+
+        flash('A password reset email has been sent via email.', 'success')
+        return redirect(url_for('login'))
+
+    return render_template('reset_password.html', form=form)
+
+
+@app.route('/change_password', methods=['GET', 'POST'])
+def change_password(token):
+
+    email = confirm_token(token)
+
+    user = user_info.query.filter(user_info.email == email).first_or_404()
+
+    if user.password_token is not None:
+        form = ChangePasswordForm(request.form)
+        if form.validate_on_submit():
+            user = user_info.query.filter_by(email=email).first()
+            if user:
+                user.password = sha256_crypt.encrypt(str(form.password.data))
+                user.password_token = None
+                db.session.commit()
+
+
+                flash('Password successfully changed.', 'success')
+                return redirect(url_for('login'))
+
+            else:
+                flash('Password change was unsuccessful.', 'danger')
+                return redirect(url_for('login'))
+        else:
+            flash('You can now change your password.', 'success')
+            return render_template('change_password.html', form=form)
+    else:
+        flash('Can not reset the password, try again.', 'danger')
+
+    return redirect(url_for('login'))
