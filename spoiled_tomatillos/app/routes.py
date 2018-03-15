@@ -58,3 +58,6 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
+@app.route('/user_profile', methods=['GET', 'POST'])
+def user_profile():
+    return render_template('user_profile.html')

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en" ng-app="TestApp">
+<head>
+  <script
+  src="http://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+
+  <!-- style !-->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
+
+  <script>
+    $(function(){
+      $("#search").load("{{ url_for('search') }}");
+    });
+  </script>
+</head>
+
+<body>
+  <div id="shell">
+    <div id="header">
+      <center>
+      <h1 id="logo"><a href="#">User Profile</a></h1>
+    </center>
+      <!--
+      <div class="social"> <span>FOLLOW US ON:</span>
+        <ul>
+          <li><a class="facebook" href="#">facebook</a></li>
+        </ul>
+      </div>
+      !-->
+      <div id="search">
+        <!-- import search.html!-->
+      </div>
+    </div>
+  </div>
+  <div id="main">
+    <div id="content">
+      <div class="box">
+        <div class="head">
+          <h2>TOP RATED MOVIES</h2>
+          <p class="text-right"><a href="#">See all</a></p>
+        </div>
+        <div class="movie">
+          <!-- Movie info Possibly use for loop to iterate through possibly [:5]!-->
+        </div>
+
+        <div class="cl">&nbsp;</div>
+      </div>
+      <div class="box">
+        <div class="head">
+          <h2>RECOMMENDATION</h2>
+          <p class="text-right"><a href="#">See all</a></p>
+        </div>
+        <div class="movie">
+          <!-- Movie info Possibly use for loop to iterate through!-->
+        </div>
+        <div class="cl">&nbsp;</div>
+      </div>
+      <div class="box">
+        <div class="head">
+          <h2>SOME CATEGORY</h2>
+          <p class="text-right"><a href="#">See all</a></p>
+        </div>
+        <div class="movie">
+          <!-- Movie info Possibly use for loop to iterate through!-->
+        </div>
+        <div class="cl">&nbsp;</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+{% endblock %}

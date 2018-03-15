@@ -17,8 +17,9 @@
         <a href="{{ url_for('index') }}">Home</a>
         <a href="{{ url_for('login') }}">Login</a>
         <a href="{{ url_for('register') }}">Register</a>
+        <a href="{{ url_for('user_profile')}}">User Profile</a>
         </div>
-        <hr> 
+        <hr>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
         <ul>
