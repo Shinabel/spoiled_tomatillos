@@ -3,28 +3,29 @@ pipeline {
   // Must specifiy agent for each stage
   agent none
   stages {
-      // Builds the application
-      stage('Build') {
-        agent {
-          docker {
-            image 'frolvlad/alpine-python3'
-          }
-        }
-        steps {
-          echo '-------------Executing build stage------------' 
+    // Builds the application
+    stage('Build') {
+      agent {
+        docker {
+          image 'frolvlad/alpine-python3'
         }
       }
-
-      // Tests the application
-      stage('Test'){
-        agent {
+      steps {
+        echo '-------------Executing build stage------------' 
+      }
+    }
+    // Tests the application
+    stage('Test'){
+      agent {
+        docker {
           image 'frolvlad/alpine-python3'
-        }        
-        steps {
-          echo "-----------Executing python tests-----------------"
-          sh 'python3 spoiled_tomatillos/app/tests/flaskr_tests.py'
         }
+      }
+      steps {
+        echo "-----------Executing python tests-----------------"
+        sh 'python3 spoiled_tomatillos/app/tests/flaskr_tests.py'
       }
     }
   }
 }
+
