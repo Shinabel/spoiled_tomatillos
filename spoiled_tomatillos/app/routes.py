@@ -1,6 +1,6 @@
-from flask import render_template, flash, redirect, url_for, request, current_app
+from flask import render_template, flash, redirect, url_for, request, current_app, session
 from passlib.handlers.sha2_crypt import sha256_crypt
-
+from flask_login import login_user, logout_user, login_required, current_user
 from app import app, db
 from app.forms import LoginForm, RegistrationForm
 from app.dbobjects import title_basic, user_info
@@ -40,6 +40,7 @@ def login():
         if sha256_crypt.verify(str(form.password.data), user.password):
             flash('Login requested for user {}, remember_me={}'.format(
                 form.username.data, form.remember_me.data))
+            login_user(user)
             return redirect(url_for('index'))
     else:
         form.submit.error = 'Invalid username or password.'
@@ -60,4 +61,5 @@ def register():
 
 @app.route('/user_profile', methods=['GET', 'POST'])
 def user_profile():
-    return render_template('user_profile.html')
+    user = current_user
+    return render_template('user_profile.html', user=user)
