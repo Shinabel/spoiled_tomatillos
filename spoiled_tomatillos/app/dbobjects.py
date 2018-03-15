@@ -33,7 +33,8 @@ class crew(db.Model):
         __tablename__ = 'title.crew'
         __table_args__ = {'extend_existing': True}
 
-        movieId = db.Column('tconst', db.Unicode, primary_key=True)
+        id = db.Column('ID', db.Integer, primary_key=True)
+        movieId = db.Column('tconst', db.Unicode)
         directors = db.Column('directors', db.Unicode)
         writers = db.Column('writers', db.Unicode)
 
@@ -42,7 +43,8 @@ class roles(db.Model):
         __tablename__ = 'title.principals'
         __table_args__ = {'extend_existing': True}
 
-        movieId = db.Column('tconst', db.Unicode, primary_key=True)
+        id = db.Column('ID', db.Integer, primary_key=True)
+        movieId = db.Column('tconst', db.Unicode)
         ordering = db.Column('ordering', db.Integer)
         personID = db.Column('nconst', db.Unicode)
         category = db.Column('category', db.Unicode)
@@ -56,6 +58,7 @@ class ratings(db.Model):
 
         movieId = db.Column('tconst', db.Unicode, primary_key=True)
         numVotes = db.Column('numVotes', db.Integer)
+        average_rating = db.Column('averageRating', db.Integer)
 
 class user_info(db.Model):
         __tablename__ = 'user_info'
