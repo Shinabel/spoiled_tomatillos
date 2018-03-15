@@ -1,23 +1,28 @@
+// Initial Pipeline declaration
 pipeline {
- agent {
-  docker {
-   image 'maven:3-alpine'
-   args '-v /root/.m2:/root/.m2'
-  }
- }
- 
+  // Must specifiy agent for each stage
+  agent none
   stages {
-   stage('Build') {
-    steps {
-     echo "Linting"
-     sh 'ls'
-    }
-   }
-   stage('Test'){
-    steps {
-     echo "Testing"
-//     sh 'python3 spoiled_tomatillos/app/tests/flaskr_tests.py'
-    }
-   }
- }
+      // Builds the application
+      stage('Build') {
+        agent {
+          docker {
+            image 'frolvlad/alpine-python3'
+          }
+        steps {
+          echo '-------------Executing build stage------------' 
+        }
+      }
+
+      // Tests the application
+      stage('Test'){
+        agent {
+          image 'frolvlad/alpine-python3'
+        }        
+        steps {
+          echo "-----------Executing python tests-----------------"
+          sh 'python3 spoiled_tomatillos/app/tests/flaskr_tests.py'
+        }
+      }
+  }
 }
