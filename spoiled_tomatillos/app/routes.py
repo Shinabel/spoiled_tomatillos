@@ -41,7 +41,7 @@ def login():
     user = user_info.query.filter(user_info.username == form.username.data).first()
     if user:
         if not user.confirmed:
-            flash('Account needs to be verified')
+            flash('Account needs to be verified', 'warning')
             return redirect(url_for('login'))
 
         if sha256_crypt.verify(str(form.password.data), user.password) and user.confirmed:
