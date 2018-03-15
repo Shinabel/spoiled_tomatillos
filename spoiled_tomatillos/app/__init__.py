@@ -2,6 +2,7 @@ from flask import Flask
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 import pymysql
+from flask_mail import Mail
 
 pymysql.install_as_MySQLdb()
 
@@ -16,5 +17,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=True
 app.config['DEBUG']=True
 # creating the database object
 db = SQLAlchemy(app)
+
+
+#creating a mail
+mail = Mail(app)
 
 from app import routes
