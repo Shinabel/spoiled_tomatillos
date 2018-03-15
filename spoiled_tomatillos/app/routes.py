@@ -101,9 +101,9 @@ def user_profile():
 @app.route('/movie/<movie_id>', methods=['GET', 'POST'])
 def movie_page(movie_id):
     current_user_rating = None
+    current_user_rating_row = user_ratings.query.filter(user_ratings.movieId == movie_id and user_ratings.user_ID == current_user).first()
 
-    if current_user.is_authenticated:
-        current_user_rating_row = user_ratings.query.filter(user_ratings.movieId == movie_id and user_ratings.user_ID == current_user).first()
+    if current_user.is_authenticated and current_user_rating_row is not None:
         current_user_rating = current_user_rating_row.ratings
 
     if request.method == "POST":
