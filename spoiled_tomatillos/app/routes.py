@@ -113,7 +113,7 @@ def confirm_email(token):
 @app.route('/reset_password',  methods=['GET', 'POST'])
 def resetPassword():
     form = ResetForm(request.form)
-    if form.validate_on_submit():
+    if form.validate():
 
         user = user_info.query.filter(user_info.email == form.email.data).first()
         token = generate_confirmation_token(user.email)
