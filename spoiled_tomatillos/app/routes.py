@@ -127,6 +127,7 @@ def resetPassword():
 @app.route('/change_password', methods=['GET', 'POST'])
 def change_password(token):
 
+    token = generate_confirmation_token(user.email)
     email = confirm_token(token)
 
     user = user_info.query.filter(user_info.email == email).first_or_404()
@@ -141,16 +142,16 @@ def change_password(token):
                 db.session.commit()
 
 
-                flash('Password successfully changed.', 'success')
+                flash('Password successfully updated.', 'success')
                 return redirect(url_for('login'))
 
             else:
                 flash('Password change was unsuccessful.', 'danger')
                 return redirect(url_for('login'))
         else:
-            flash('You can now change your password.', 'success')
+            flash('Please enter your new password.', 'success')
             return render_template('change_password.html', form=form)
     else:
-        flash('Can not reset the password, try again.', 'danger')
+        flash('unable to reset the password, try again.', 'danger')
 
     return redirect(url_for('login'))
