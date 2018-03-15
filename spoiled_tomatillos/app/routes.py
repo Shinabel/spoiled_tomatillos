@@ -31,7 +31,7 @@ def index():
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     if request.method == "POST":
-        
+
         #the movies with titles like the string provided
         results = title_basic.query.filter(title_basic.title.like('%' + str(request.form['search']) + '%')).all()
         data = []
@@ -104,7 +104,7 @@ def movie_page(movie_id):
         if current_user.is_authenticated:
             original_rating = user_ratings.query.filter(user_ratings.movieId == movie_id and user_ratings.user_ID == current_user).first()
             if original_rating is None:
-                db.session.add(user_ratings(user_ID=current_user, movieId=movie_id, ratings=request.form['user-rating']))
+                db.session.add(user_ratings(user_ID=current_user.get_id(), movieId=movie_id, ratings=request.form['user-rating']))
                 db.session.commit()
             else:
                 original_rating.ratings = request.form['user-rating']
