@@ -40,13 +40,17 @@ def login():
   if form.validate_on_submit():
     user = user_info.query.filter(user_info.username == form.username.data).first()
     if user:
-        if sha256_crypt.verify(str(form.password.data), user.password):
+        if not user.confirmed:
+            flash('Account needs to be verified')
+            return redirect(url_for('login'))
+
+        if sha256_crypt.verify(str(form.password.data), user.password) and user.confirmed:
             flash('Login requested for user {}, remember_me={}'.format(
                 form.username.data, form.remember_me.data))
             return redirect(url_for('index'))
     else:
-        form.submit.error = 'Invalid username or password.'
-        render_template('login.html', title='Sign In', form=form)
+        form.submit.error = 'Invalid username or password'
+        return render_template('login.html', title='Sign In', form=form)
   return render_template('login.html', title='Sign In', form=form)
 
 

@@ -2,10 +2,9 @@ import os
 
 class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
-
-    ##########################################
+    
     #For authentication
-    SECURITY_PASSWORD_SALT = 'my_precious_two'
+    SECURITY_PASSWORD_SALT = 'yOu_wiLl-NeVEr_GuEsS!@#$'
     DEBUG = False
     BCRYPT_LOG_ROUNDS = 13
     WTF_CSRF_ENABLED = True

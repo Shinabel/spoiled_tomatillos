@@ -7,7 +7,10 @@ class User:
 		self.username = username
 		self.email = email
 		self.password = sha256_crypt.encrypt(str(password))
-		self.confirmed = False
+		self.confirmed = confirmed
 
 	def _change_password(self, password):
 		self.password = sha256_crypt.encrypt(str(password))
+
+	def is_active(self):
+		return True
