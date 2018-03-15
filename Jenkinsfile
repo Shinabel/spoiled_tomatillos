@@ -18,12 +18,17 @@ pipeline {
     stage('Test'){
       agent {
         docker {
-          image 'frolvlad/alpine-python3'
+          image 'qnib/pytest'
         }
       }
       steps {
         echo "-----------Executing python tests-----------------"
-        sh 'python3 spoiled_tomatillos/app/tests/flaskr_tests.py'
+        sh 'pytest --verbose --junit-xml test-reports/results.xml spoiled_tomatillos/app/tests/flaskr_tests.py'
+      }
+      post {
+        always {
+          junit 'test-reports/results.xml'
+        }
       }
     }
     // Sonarqube sending project to Sonarqube server and starting analysis
@@ -42,6 +47,7 @@ pipeline {
         }  
       }
     }
+    // Running Sonarqube results through Quality Gate set up on server
     stage ('Quality') {
       agent {
         docker {
