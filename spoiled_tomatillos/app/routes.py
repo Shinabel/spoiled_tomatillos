@@ -93,6 +93,10 @@ def user_profile():
     user = current_user
     return render_template('user_profile.html', user=user)
 
+@app.route('/movie/<movie_title>', methods=['GET', 'POST'])
+def movie_page(movie_title):
+    return render_template('movie.html', user=movie_title)
+
 @app.route('/confirm/<token>')
 def confirm_email(token):
     try:
