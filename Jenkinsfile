@@ -46,8 +46,19 @@ pipeline {
           image 'maven:3-alpine'
           args '-v /root/.2:/root/.m2'
         }
-        steps {
-          echo "-----------Quality Gate Check-----------------"
+      }
+      steps {
+        echo "-----------Quality Gate Check-----------------"
+        sh 'sleep 30'
+        timeout(time: 10, unit: 'SECONDS') {
+          retry(5) {
+            script {
+              def qg = waitForQualityGate()
+              if (qg.status != 'OK') {
+                error "Pipeline aborted due to quality gate failure: ${qg.status}"
+              }
+            }
+          }
         }
       }
     }
