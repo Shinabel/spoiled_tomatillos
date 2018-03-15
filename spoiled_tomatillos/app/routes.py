@@ -12,6 +12,8 @@ from app.models import User
 from app.token import generate_confirmation_token, confirm_token
 from app.email import send_email
 
+from flask_login import login_user, logout_user, login_required, current_user
+
 @app.route('/')
 def main():
     return redirect(url_for('login'))
@@ -47,9 +49,14 @@ def login():
             return redirect(url_for('login'))
 
         if sha256_crypt.verify(str(form.password.data), user.password) and user.confirmed:
+            login_user(user) #login user to current user
+            
+            #testing if current user works
+            print(current_user)
+
             flash('Login requested for user {}, remember_me={}'.format(
-                form.username.data, form.remember_me.data))
-            login_user(user)
+                form.username.data, user.confirmed))
+
             return redirect(url_for('index'))
     else:
         form.submit.error = 'Invalid username or password'
@@ -62,6 +69,9 @@ def register():
     form = RegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
         user = User(form.username.data, form.email.data, form.password.data, False)
+
+        #before adding into database, check if the email is already in the database.
+
 
         db.session.add(user_info(username=user.username, email=user.email,
          password=user.password, register_date = datetime.datetime.now(),
@@ -155,3 +165,11 @@ def change_password(token):
         flash('unable to reset the password, try again.', 'danger')
 
     return redirect(url_for('login'))
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('user logged out.', 'success')
+    return redirect(url_for('login'))
+

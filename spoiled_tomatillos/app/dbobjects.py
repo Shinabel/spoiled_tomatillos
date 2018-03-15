@@ -1,6 +1,7 @@
 from flask import render_template
 from flask import request
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 from app import db, app
 
 

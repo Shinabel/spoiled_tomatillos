@@ -1,55 +1,42 @@
 {% extends "base.html" %}
 
 {% block content %}
-<center>
-<body>
-	<header>
-		<div class="cotainter page-title">
-			<a href="/index">
-				<h1>Spoiled Tomatillos</h1>
-			</a>
-		</div>
-	</header>
 
-	<main>
-		<h1>Sign In</h1>
+<body id="login-page">
+    <div class="form-box">
+        <div class="form-logo">
+            <p class="text-center logo">Spoiled Tomatillos</p>
+        </div>
 		<form action="login" action="/login" method="post">
 			{{ form.hidden_tag() }}
-			<p>
-				{{ form.username.label }}<br>
-				{{ form.username(size=32) }}<br>
-				{% for error in form.username.errors %}
-				<span style="color: red;">[{{ error }}]</span>
-				{% endfor %}
-			</p>
-			<p>
-				{{ form.password.label }}<br>
-				{{ form.password(size=32) }}<br>
-				{% for error in form.password.errors %}
-				<span style="color: red;">[{{ error }}]</span>
-				{% endfor %}
-			</p>
-			<p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
-			<p>{{ form.submit() }}</p>
+			<!-- Username -->
+			{{ form.username(size=32, placeholder="Username", class="form-control") }}
+			{% for error in form.username.errors %}
+			<span style="color: red;">[{{ error }}]</span>
+			{% endfor %}
+			<!-- Password -->
+			{{ form.password(size=32, placeholder="Password", class="form-control") }}
+			{% for error in form.password.errors %}
+			<span style="color: red;">[{{ error }}]</span>
+			{% endfor %}
+			<!-- Remember Me -->
+			{{ form.remember_me() }} {{ form.remember_me.label }}
+			<!-- Submit Button -->
+			{{ form.submit(class="btn btn-social") }}
 			{% if form.submit.error %}
 				<span style="color: red;">[{{ form.submit.error }}]</span>
 			{% endif %}
-			<div class="text-center create-account">
-				<p class="message">Does not have an account? <a href="{{ url_for('register') }}">Create an account</a></p>
-			</div>
 
-			<div class="text-center forgot">
-				<span class="txt1">
-					Forgot?
-				</span>
-				<a class="user-password" href="/reset_password">
-					<!-- need to add a way to find out username/password in database !-->
-					Find  Username / Password
-				</a>
-			</div>
 		</form>
-	</main>
+		<a href="/reset_password" class="login-action" title="Forgot password">
+			<p>Forgot your password?</p>
+		</a>
+
+		<a href="{{ url_for('register') }}" class="login-action" title="Sign in">
+			<p>New User?</p>
+		</a>
+    </div><!--Close form-box-->
+
 </body>
-</center>
 
 {% endblock %}
