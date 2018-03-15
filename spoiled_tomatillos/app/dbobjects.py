@@ -68,6 +68,7 @@ class user_info(db.Model):
         register_date = db.Column('register_date', db.DateTime, nullable=False)
         confirmed = db.Column('confirmed', db.Boolean, nullable=False, default=False)
         confirmed_date = db.Column('confirmed_date', db.DateTime)
+        password_token = db.Column('password_token', db.Unicode)
 
 
         def is_active(self):

@@ -26,12 +26,13 @@
 			{% if form.submit.error %}
 				<span style="color: red;">[{{ form.submit.error }}]</span>
 			{% endif %}
+
 		</form>
-		<a href="#" class="login-action" title="Forgot password">
+		<a href="/reset_password" class="login-action" title="Forgot password">
 			<p>Forgot your password?</p>
 		</a>
 
-		<a href="{{ url_for('register') }}" class="login-action" title="Signi in">
+		<a href="{{ url_for('register') }}" class="login-action" title="Sign in">
 			<p>New User?</p>
 		</a>
     </div><!--Close form-box-->
