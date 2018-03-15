@@ -10,6 +10,7 @@ pymysql.install_as_MySQLdb()
 app = Flask(__name__)
 app.config.from_object(Config)
 
+
 # connecting to the database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://spoiled_app:team53letsgo@cs4500-spring2018-morgan.clvsn19ktapw.us-east-2.rds.amazonaws.com:3306/spoiled_tomatillos'
 # allow sql alchemy to track changes to the databse

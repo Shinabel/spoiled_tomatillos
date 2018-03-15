@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en" ng-app="TestApp">
+<head>
+  <script
+  src="http://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+
+  <!-- style !-->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
+
+
+<body>
+  <div id="shell">
+    <div id="header">
+      <center>
+      <h1 id="logo"><a href="#">User Profile</a></h1>
+    </center>
+
+<section id="name_image">
+  <h1> Profile Name</h1>
+<img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="W3Schools.com">
+</section>
+
+<section id="bio">
+<p> Profile Description: Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam,
+  a cursus ipsum ante quis turpis. Nulla facilisi. Ut fringilla. Suspendisse potenti.
+  Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices.
+  Suspendisse in justo eu magna luctus suscipit.</p>
+</section>
+<section id="movies">
+  <h1>Favorite Movies</h1>
+  <p class="text-left"><a href="#">See all</a></p>
+</section>
+<section id="reviews">
+  <h1>Reviews</h1>
+  <p class="text-left"><a href="#">See all</a></p>
+</section>
+<section id="groups">
+  <h1>Groups</h1>
+  <p class="text-left"><a href="#">See all</a></p>
+</section>
+</body>
+{% endblock %}
