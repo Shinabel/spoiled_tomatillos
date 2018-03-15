@@ -24,5 +24,6 @@ pipeline {
           sh 'python3 spoiled_tomatillos/app/tests/flaskr_tests.py'
         }
       }
+    }
   }
 }
