@@ -35,11 +35,12 @@ def search():
     if request.method == "POST":
 
         # the movies with titles like the string provided
-        results = TitleBasic.query.filter(TitleBasic.title.like('%' + str(request.form['search']) + '%')).all()
+        results = TitleBasic.query.filter(TitleBasic.title.like('%' + str(request.form['search']) + '%'))\
+            .order_by(TitleBasic.year.desc()).all()
         data = []
         for r in results:
             # format the result, ensuring properties are strings
-            data.append({"title": str(r.title) + ' (' + str(r.year) + ')', "id": r.id})
+            data.append({"title": str(r.title), "year": str(r.year), "id": r.id})
 
         return render_template("search.html", allmovies=data)
     return render_template('search.html')
