@@ -20,14 +20,14 @@ login_manager.init_app(app)
 #creating a mail
 mail = Mail(app)
 
-from app.dbobjects import user_info
+from app.dbobjects import UserInfo
 
 login_manager.login_view = "user.login"
 login_manager.login_message_category = "danger"
 
 @login_manager.user_loader
 def load_user(user_id):
-    return user_info.query.filter(user_info.user_ID == int(user_id)).first()
+    return UserInfo.query.filter(UserInfo.user_ID == int(user_id)).first()
 
 from app import routes
 
