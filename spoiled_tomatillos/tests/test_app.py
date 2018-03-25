@@ -1,13 +1,12 @@
 import unittest
 import os
-#from app import app as my_app
-from config import Config
+from app import app as test_app
+from config import test_config
 import pytest
 
 @pytest.fixture
 def app():
     pass
-#    app = create
 
 class MyTestClass(unittest.TestCase): 
 
