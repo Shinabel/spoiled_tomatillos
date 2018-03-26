@@ -34,13 +34,15 @@ def index():
 def search():
     if request.method == "POST":
 
-        # the movies with titles like the string provided
+        # the movies with titles like the string provided, limit to 300
         results = TitleBasic.query.filter(TitleBasic.title.like('%' + str(request.form['search']) + '%'))\
-            .order_by(TitleBasic.year.desc()).all()
+            .order_by(TitleBasic.year.desc()).limit(300).all()
         data = []
         for r in results:
-            # format the result, ensuring properties are strings
-            data.append({"title": str(r.title), "year": str(r.year), "id": r.id})
+            # check if year is valid
+            if str(r.year).isdigit():
+                # format the result, ensuring properties are strings
+                data.append({"title": str(r.title), "year": str(r.year), "id": r.id})
 
         return render_template("search.html", allmovies=data)
     return render_template('search.html')
@@ -168,14 +170,24 @@ def movie_page(movie_id):
         image_link = "https://developersushant.files.wordpress.com/2015/02/no-image-available.png"
     else:
         image_link = image_link.find("img")['src']
-    movie_description = soup.find("div", class_="summary_text").get_text().strip()
-    if movie_description == "Add a Plot »":
-        movie_description = "No description."
+    movie_description = "No description."
+    if soup.find("div", class_="summary_text") is not None:
+        movie_description = soup.find("div", class_="summary_text").get_text().strip()
+        if movie_description == "Add a Plot »":
+            movie_description = "No description."
 
-    return render_template('movie.html', movie=movie, image=image_link, desc=movie_description, allActors=allActors,
-                           rating_count=rating.numVotes, user_rating=user_rating,
-                           current_user_rating=current_user_rating,
-                           rating=rating.average_rating, director_name=director_name, writer_name=writer_name)
+    # fill rating info with NA if not available
+    if rating is not None:
+        return render_template('movie.html', movie=movie, image=image_link, desc=movie_description, allActors=allActors,
+                               rating_count=rating.numVotes, user_rating=user_rating,
+                               current_user_rating=current_user_rating,
+                               rating=rating.average_rating, director_name=director_name, writer_name=writer_name)
+    else:
+        return render_template('movie.html', movie=movie, image=image_link, desc=movie_description, allActors=allActors,
+                               rating_count="NA", user_rating=user_rating,
+                               current_user_rating=current_user_rating,
+                               rating="NA", director_name=director_name, writer_name=writer_name)
+
 
 
 @app.route('/confirm/<token>')
