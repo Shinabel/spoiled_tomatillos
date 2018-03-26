@@ -7,20 +7,41 @@ from flask_login import LoginManager
 from werkzeug.utils import find_modules, import_string
 
 pymysql.install_as_MySQLdb()
+
 app = Flask(__name__, static_url_path='/static')
 app.config.from_object(Config)
 
+db = SQLAlchemy(app)
+
+#creating login manager
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+#creating a mail
+mail = Mail(app)
+
+from app.dbobjects import user_info
+
+login_manager.login_view = "user.login"
+login_manager.login_message_category = "danger"
+
+@login_manager.user_loader
+def load_user(user_id):
+    return user_info.query.filter(user_info.user_ID == int(user_id)).first()
+
+from app import routes
+
 def create_app(config=None):
-	""" Factory method creating app
-	"""
-	app = Flask(__name__, static_url_path='/static')
-	app.config.from_object(Config)
+    """ Factory method creating app
+    """
+    app = Flask(__name__, static_url_path='/static')
+    app.config.from_object(Config)
 
-	register_blueprints(app)
-	register_cli(app)
-	register_teardowns(app)
+    register_blueprints(app)
+    register_cli(app)
+    register_teardowns(app)
 
-	return app
+    return app
 
 def register_blueprints(app):
     """ Registers blueprint modules
@@ -46,23 +67,3 @@ def register_teardowns(app):
     @app.teardown_appcontext
     def close_db(error):
         pass
-
-db = SQLAlchemy(app)
-
-#creating login manager
-login_manager = LoginManager()
-login_manager.init_app(app)
-
-#creating a mail
-mail = Mail(app)
-
-from app.dbobjects import user_info
-
-login_manager.login_view = "user.login"
-login_manager.login_message_category = "danger"
-
-@login_manager.user_loader
-def load_user(user_id):
-    return user_info.query.filter(user_info.user_ID == int(user_id)).first()
-
-from app import routes

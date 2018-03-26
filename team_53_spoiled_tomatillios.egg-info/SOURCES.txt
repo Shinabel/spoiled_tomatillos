@@ -1,0 +1,6 @@
+README.md
+team_53_spoiled_tomatillios.egg-info/PKG-INFO
+team_53_spoiled_tomatillios.egg-info/SOURCES.txt
+team_53_spoiled_tomatillios.egg-info/dependency_links.txt
+team_53_spoiled_tomatillios.egg-info/requires.txt
+team_53_spoiled_tomatillios.egg-info/top_level.txt
