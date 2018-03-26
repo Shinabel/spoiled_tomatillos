@@ -3,28 +3,54 @@
 <p>
     {% block content %}
     <body>
-        <div id="main">
-            <div class="container">
-              <h2>Movie Results</h2>
-                <p>movies are ordered by release date</p>
-              <div class="table-responsive" style="width:95%">
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>Title</th>
-                    <th>Release Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                {% for m in allmovies %}
-                  <tr>
-                      <td> <a href="/movie/{{ m.id }}">{{ m.title }}</a></td>
-                      <td>{{ m.year }}</td>
-                  </tr>
-                {% endfor %}
-                </tbody>
-              </table>
-              </div>
-    </body>
+    <div id="main">
+        {% if allusers %}
+        <div class="container">
+            <h2>User Results</h2>
+<p>Users are ordered by name</p>
+<div class="table-responsive" style="width:95%">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for u in allusers %}
+        <tr>
+            <td><a href="/user_profile/{{ u.id }}">{{ u.name }}</a></td>
+            <td>{{ u.email }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+{% endif %}
+<div class="container">
+    <h2>Movie Results</h2>
+    <p>movies are ordered by release date</p>
+    <div class="table-responsive" style="width:95%">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Release Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for m in allmovies %}
+            <tr>
+                <td><a href="/movie/{{ m.id }}">{{ m.title }}</a></td>
+                <td>{{ m.year }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+</body>
 </p>
 {% endblock %}

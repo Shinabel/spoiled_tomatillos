@@ -33,6 +33,13 @@ def index():
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     if request.method == "POST":
+        # the users with names that match the string provided, no limit, order by name
+        user_results = UserInfo.query.filter(UserInfo.username.like('%' + str(request.form['search']) + '%'))\
+            .order_by(UserInfo.username).all()
+        user_data = []
+        for r in user_results:
+                # format the result, ensuring properties are strings
+                user_data.append({"name": str(r.username), "email": str(r.email), "id": r.user_ID})
 
         # the movies with titles like the string provided, limit to 300
         results = TitleBasic.query.filter(TitleBasic.title.like('%' + str(request.form['search']) + '%'))\
@@ -44,7 +51,7 @@ def search():
                 # format the result, ensuring properties are strings
                 data.append({"title": str(r.title), "year": str(r.year), "id": r.id})
 
-        return render_template("search.html", allmovies=data)
+        return render_template("search.html", allmovies=data, allusers=user_data)
     return render_template('search.html')
 
 
@@ -102,6 +109,13 @@ def register():
 @app.route('/user_profile', methods=['GET', 'POST'])
 def user_profile():
     user = current_user
+    return render_template('user_profile.html', user=user)
+
+
+# route for another user
+@app.route('/user_profile/<user_id>', methods=['GET', 'POST'])
+def other_user_profile(user_id):
+    user = UserInfo.query.get(user_id)
     return render_template('user_profile.html', user=user)
 
 
