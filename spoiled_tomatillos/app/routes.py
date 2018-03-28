@@ -72,8 +72,8 @@ def login():
                 # testing if current user works
                 print(current_user)
 
-                flash('Login requested for user {}, remember_me={}'.format(
-                    form.username.data, user.confirmed))
+                flash('Welcome {}!'.format(
+                    form.username.data), 'info')
 
                 return redirect(url_for('index'))
         else:
@@ -140,7 +140,7 @@ def movie_page(movie_id):
                 original_rating.ratings = request.form['user-rating']
                 db.session.commit()
         else:
-            flash('You must be signed in to rate movies.')
+            flash('You must be signed in to rate movies.', 'warning')
 
     movie = TitleBasic.query.filter_by(id=movie_id).first()
     rating = Ratings.query.filter_by(movieId=movie_id).first()
@@ -280,5 +280,5 @@ def change_password(token):
 @login_required
 def logout():
     logout_user()
-    flash('user logged out.', 'success')
+    flash('User logged out.', 'success')
     return redirect(url_for('login'))
