@@ -261,6 +261,10 @@ header .badge {
   border-color: #9a3b18;
 }
 
+.alertdiv {
+  margin-top: 80px;
+  z-index: 10;
+}
 
 
 /*----------------------------------------------------------------
