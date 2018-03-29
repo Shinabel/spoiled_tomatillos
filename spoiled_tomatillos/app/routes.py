@@ -288,7 +288,7 @@ def reset_password():
         change_url = url_for('change_password', token=token, _external=True)
 
         html = render_template('reset.html',
-                               username=user.email,
+                               username=user.username,
                                change_url=change_url)
         subject = "Reset your password"
         send_email(user.email, subject, html)
