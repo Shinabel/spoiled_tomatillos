@@ -6,7 +6,10 @@
 <body>
     <div id="main">
 <section id="name_image">
-    <button type="button">Edit</button>
+    <button type="button">Edit Profile</button>
+    <form>
+      <input type="button" value="Change Password" onclick="window.location.href='{{url_for('reset_password')}}'" />
+    </form>
   <h1>{{user.username}}</h1>
 <img src="https://www.eharmony.co.uk/dating-advice/wp-content/uploads/2011/04/profilephotos-960x640.jpg" alt="propic" id="prof-pic">
 </section>
