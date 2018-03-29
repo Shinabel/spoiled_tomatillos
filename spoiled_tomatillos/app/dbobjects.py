@@ -4,7 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from app import db, app
 
-
 # movie titles table as python object
 class TitleBasic(db.Model):
     __tablename__ = 'title.basics'
@@ -54,17 +53,7 @@ class Roles(db.Model):
     job = db.Column('job', db.Unicode)
     characters = db.Column('characters', db.Unicode)
 
-
-# crew table as python object
-class Ratings(db.Model):
-    __tablename__ = 'title.ratings'
-    __table_args__ = {'extend_existing': True}
-
-    movieId = db.Column('tconst', db.Unicode, primary_key=True)
-    numVotes = db.Column('numVotes', db.Integer)
-    average_rating = db.Column('averageRating', db.Integer)
-
-
+# class to represent a user from sql
 class UserInfo(db.Model):
     __tablename__ = 'user_info'
     __table_args__ = {'extend_existing': True}
@@ -86,16 +75,41 @@ class UserInfo(db.Model):
 
     def is_authenticated(self):
         return True
-
+      
     def is_anonymous(self):
         return False
 
-
-class UserRatings(db.Model):
-    __tablename__ = 'user.ratings'
+# crew table as python object
+class Ratings(db.Model):
+    __tablename__ = 'title.ratings'
     __table_args__ = {'extend_existing': True}
-
+    
     rating_ID = db.Column('rating_ID', db.Integer, primary_key=True)
     user_ID = db.Column('user_ID', db.Integer, db.ForeignKey('user_info.user_ID'))
     movieId = db.Column('tconst', db.Unicode, db.ForeignKey('title.basics.tconst'))
     ratings = db.Column('ratings', db.Float)
+
+# class that represents the user ratings from sql
+class UserRatings(db.Model):
+    __tablename__ = 'user.ratings'
+    __table_args__ = {'extend_existing': True}
+
+# class that represents the user.friends table in sql, foreign keys from user ids
+class Friends(db.Model):
+    __tablename__ = 'user.friends'
+    __table_args__ = {'extend_existing': True}
+
+    friendship_ID = db.Column('friendship_ID', db.Integer, primary_key=True)
+    friend1_ID = db.Column('friend1_ID', db.Integer, db.ForeignKey('user_info.user_ID'))
+    friend2_ID = db.Column('friend2_ID', db.Unicode, db.ForeignKey('user_info.user_ID'))
+
+
+# class that represents the user.favorites table in sql, foreign keys from user ids, and movie ids
+class Favorites(db.Model):
+    __tablename__ = 'user.favorites'
+    __table_args__ = {'extend_existing': True}
+
+    favorite_ID = db.Column('favorite_ID', db.Integer, primary_key=True)
+    user_ID = db.Column('user_ID', db.Integer, db.ForeignKey('user_info.user_ID'))
+    movieId = db.Column('tconst', db.Unicode, db.ForeignKey('title.basics.tconst'))
+    note = db.Column('note', db.Unicode)

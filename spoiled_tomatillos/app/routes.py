@@ -2,15 +2,16 @@ from flask import render_template, flash, redirect, url_for, request, current_ap
 import datetime
 
 from passlib.handlers.sha2_crypt import sha256_crypt
-from flask_login import login_user, logout_user, login_required, current_user
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, ResetForm, ChangePasswordForm
-from app.dbobjects import TitleBasic, UserInfo, Ratings, Roles, Actors, UserRatings, Crew
+
+from app.dbobjects import TitleBasic, UserInfo, Ratings, Roles, Actors, UserRatings, Crew, Friends
 from app.models import User
 
 from app.token import generate_confirmation_token, confirm_token
 from app.email import send_email
 
+from sqlalchemy import or_
 from flask_login import login_user, logout_user, login_required, current_user
 
 # getting movie posters
@@ -33,6 +34,13 @@ def index():
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     if request.method == "POST":
+        # the users with names that match the string provided, no limit, order by name
+        user_results = UserInfo.query.filter(UserInfo.username.like('%' + str(request.form['search']) + '%'))\
+            .order_by(UserInfo.username).all()
+        user_data = []
+        for r in user_results:
+                # format the result, ensuring properties are strings
+                user_data.append({"name": str(r.username), "email": str(r.email), "id": r.user_ID})
 
         # the movies with titles like the string provided, limit to 300
         results = TitleBasic.query.filter(TitleBasic.title.like('%' + str(request.form['search']) + '%'))\
@@ -44,7 +52,7 @@ def search():
                 # format the result, ensuring properties are strings
                 data.append({"title": str(r.title), "year": str(r.year), "id": r.id})
 
-        return render_template("search.html", allmovies=data)
+        return render_template("search.html", allmovies=data, allusers=user_data)
     return render_template('search.html')
 
 
@@ -67,6 +75,8 @@ def login():
 
                 flash('Login requested for user {}, remember_me={}'.format(
                     form.username.data, user.confirmed))
+                flash('Welcome {}!'.format(
+                    form.username.data), 'info')
 
                 return redirect(url_for('index'))
         else:
@@ -80,9 +90,7 @@ def register():
     form = RegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
         user = User(form.username.data, form.email.data, form.password.data, False)
-
         # before adding into database, check if the email is already in the database.
-
         db.session.add(UserInfo(username=user.username, email=user.email,
                                 password=user.password, register_date=datetime.datetime.now(),
                                 confirmed=False, confirmed_date=None))
@@ -99,17 +107,84 @@ def register():
     return render_template('register.html', form=form)
 
 
+# current user's profile
 @app.route('/user_profile', methods=['GET', 'POST'])
 def user_profile():
     user = current_user
-    return render_template('user_profile.html', user=user)
+    friend_list = get_friend_list(user)
+    return render_template('user_profile.html', user=user, friend=0, friend_list=friend_list)
+
+
+# adding a friend
+@app.route('/add_friend/<user_id>', methods=['GET', 'POST'])
+def add_friend(user_id):
+    user = UserInfo.query.get(user_id)
+    relationship = Friends(friend1_ID=current_user.user_ID, friend2_ID=user.user_ID)
+    db.session.add(relationship)
+    db.session.commit()
+    friend_list = get_friend_list(user)
+    # render the template which change = 1 (adding a friend)
+    return render_template('user_profile.html', user=user, change=1, friend=1, friend_list=friend_list)
+
+
+# removing a friend
+@app.route('/unfriend/<user_id>', methods=['GET', 'POST'])
+def unfriend(user_id):
+    user = UserInfo.query.get(user_id)
+    relationship = Friends.query.filter(Friends.friend1_ID == current_user.user_ID,
+                                        Friends.friend2_ID == user.user_ID).first()
+    if relationship is None:
+        relationship = Friends.query.filter(Friends.friend1_ID == user.user_ID,
+                                            Friends.friend2_ID == current_user.user_ID).first()
+    db.session.delete(relationship)
+    db.session.commit()
+    friend_list = get_friend_list(user)
+    # render the template which change = -1 (removing a friend)
+    return render_template('user_profile.html', user=user, change=-1, friend=-1, friend_list=friend_list)
+
+
+# route for another user
+@app.route('/user_profile/<user_id>', methods=['GET', 'POST'])
+def other_user_profile(user_id):
+    user = UserInfo.query.get(user_id)
+    # figure out if the users are friends
+    friend = Friends.query.filter(Friends.friend1_ID == current_user.user_ID, Friends.friend2_ID == user.user_ID).first()
+    print(friend)
+    if friend is None:
+        print("none")
+        friend = Friends.query.filter(Friends.friend1_ID == user.user_ID, Friends.friend2_ID == current_user.user_ID).first()
+    # if they they are friends, set friends to true, else false
+    if friend is not None:
+        friend = 1
+    else:
+        friend = -1
+    # set friend to 0 if looking at your own page
+    if user.user_ID == current_user.user_ID:
+        friend = 0
+    friend_list = get_friend_list(user)
+    print(friend_list)
+    # render the template which change = 0 (no friend or unfriend)
+    return render_template('user_profile.html', user=user, friend=friend, change=0, friend_list=friend_list)
+
+
+# get the friend list for a user
+def get_friend_list(user):
+    friend_ids = Friends.query.filter(or_(Friends.friend1_ID == user.user_ID, Friends.friend2_ID == user.user_ID)).all()
+    friend_list = []
+    for person in friend_ids:
+        if person.friend1_ID is not user.user_ID:
+            friend_list.append(UserInfo.query.filter(UserInfo.user_ID == person.friend1_ID).first())
+        else:
+            friend_list.append(UserInfo.query.filter(UserInfo.user_ID == person.friend2_ID).first())
+    return friend_list
+
 
 
 @app.route('/movie/<movie_id>', methods=['GET', 'POST'])
 def movie_page(movie_id):
     current_user_rating = None
     current_user_rating_row = UserRatings.query.filter(
-        UserRatings.movieId == movie_id and UserRatings.user_ID == current_user).first()
+        UserRatings.movieId == movie_id, UserRatings.user_ID == current_user.user_ID).first()
 
     if current_user.is_authenticated and current_user_rating_row is not None:
         current_user_rating = current_user_rating_row.ratings
@@ -117,7 +192,7 @@ def movie_page(movie_id):
     if request.method == "POST":
         if current_user.is_authenticated:
             original_rating = UserRatings.query.filter(
-                UserRatings.movieId == movie_id and UserRatings.user_ID == current_user).first()
+                UserRatings.movieId == movie_id, UserRatings.user_ID == current_user.user_ID).first()
             if original_rating is None:
                 db.session.add(
                     UserRatings(user_ID=current_user.get_id(), movieId=movie_id, ratings=request.form['user-rating']))
@@ -126,7 +201,7 @@ def movie_page(movie_id):
                 original_rating.ratings = request.form['user-rating']
                 db.session.commit()
         else:
-            flash('You must be signed in to rate movies.')
+            flash('You must be signed in to rate movies.', 'warning')
 
     movie = TitleBasic.query.filter_by(id=movie_id).first()
     rating = Ratings.query.filter_by(movieId=movie_id).first()
@@ -221,7 +296,7 @@ def reset_password():
         change_url = url_for('change_password', token=token, _external=True)
 
         html = render_template('reset.html',
-                               username=user.email,
+                               username=user.username,
                                change_url=change_url)
         subject = "Reset your password"
         send_email(user.email, subject, html)
@@ -266,5 +341,5 @@ def change_password(token):
 @login_required
 def logout():
     logout_user()
-    flash('user logged out.', 'success')
+    flash('User logged out.', 'success')
     return redirect(url_for('login'))
