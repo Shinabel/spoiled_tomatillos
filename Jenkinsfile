@@ -25,7 +25,7 @@ pipeline {
       steps {
         echo "-----------Executing python tests-----------------"
         sh 'pip3 install -r spoiled_tomatillos/tests/requirements.txt'
-        sh 'cd spoiled_tomatillos/tests; pytest --verbose --junit-xml test-reports/results.xml'
+        sh 'cd spoiled_tomatillos/tests/ && pytest'
       }
       post {
         always {
