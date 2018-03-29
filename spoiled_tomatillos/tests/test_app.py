@@ -28,9 +28,9 @@ def test_app(client):
 def test_login_manager(client):
     from app import login_manager
 
-def test_create_app(client):
-    from app import create_app
-    create_app()
+# def test_create_app(client):
+#     from app import create_app
+#     create_app()
 
 def test_test_config(client):
     from config import Config

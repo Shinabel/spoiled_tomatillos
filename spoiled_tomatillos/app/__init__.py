@@ -6,6 +6,7 @@ from flask_mail import Mail
 from flask_login import LoginManager
 from werkzeug.utils import find_modules, import_string
 
+
 pymysql.install_as_MySQLdb()
 
 app = Flask(__name__, static_url_path='/static')
@@ -31,39 +32,39 @@ def load_user(user_id):
 
 from app import routes
 
-def create_app(config=None):
-    """ Factory method creating app
-    """
-    app = Flask(__name__, static_url_path='/static')
-    app.config.from_object(Config)
+# def create_app(config=None):
+#     """ Factory method creating app
+#     """
+#     app = Flask(__name__, static_url_path='/static')
+#     app.config.from_object(Config)
 
-    register_blueprints(app)
-    register_cli(app)
-    register_teardowns(app)
+#     register_blueprints(app)
+#     register_cli(app)
+#     register_teardowns(app)
 
-    return app
+#     return app
 
-def register_blueprints(app):
-    """ Registers blueprint modules
-    """
-    for name in find_modules('app.blueprints'):
-        mod = import_string(name)
-        if hasattr(mod, 'bp'):
-            app.register_blueprint(mod.bp)
-    return None
+# def register_blueprints(app):
+#     """ Registers blueprint modules
+#     """
+#     for name in find_modules('app.blueprints'):
+#         mod = import_string(name)
+#         if hasattr(mod, 'bp'):
+#             app.register_blueprint(mod.bp)
+#     return None
 
-def register_cli(app):
-    """ Registers all cli commands
-    """
-    @app.cli.command('initdb')
-    def initdb_command():
-        """ Initializes database connection
-        """
-        db = SQLAlchemy(app)
+# def register_cli(app):
+#     """ Registers all cli commands
+#     """
+#     @app.cli.command('initdb')
+#     def initdb_command():
+#         """ Initializes database connection
+#         """
+#         db = SQLAlchemy(app)
 
-def register_teardowns(app):
-    """ Teardown methods for when application terminates
-    """
-    @app.teardown_appcontext
-    def close_db(error):
-        pass
+# def register_teardowns(app):
+#     """ Teardown methods for when application terminates
+#     """
+#     @app.teardown_appcontext
+#     def close_db(error):
+#         pass
