@@ -23,6 +23,16 @@ class RegistrationForm(Form):
         'I acknowledge that I have read and fully understand the terms and conditions of the site',
         [validators.Required()])
 
+    def validate(self):
+    	initial_validation = super(RegistrationForm, self).validate()
+    	if not initial_validation:
+    		return False
+    	user = UserInfo.query.filter_by(email=self.email.data).first()
+    	if user:
+    		self.email.errors.append("Email already used")
+    		return False
+    	return True
+
 
 class ResetForm(Form):
     email = StringField(
