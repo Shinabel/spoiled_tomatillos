@@ -1,6 +1,6 @@
 import unittest
 import os
-from config import test_config
+from config import Config
 import pytest
 #import ipdb
 
@@ -16,6 +16,7 @@ def client():
     TODO: Add more environment info, sepatate testing config
     """
     from app import app
+    app.config.from_object(Config)
     client = app.test_client()
     yield client
 
@@ -39,6 +40,14 @@ def test_test_config(client):
 def test_dbobjects(client):
     from app import dbobjects
 
+def test_user_info_methods(client):
+    from app import dbobjects
+    ui = dbobjects.UserInfo
+    ui.is_active
+    ui.get_id
+    ui.is_authenticated
+    ui.is_anonymous
+
 def test_email(client):
     from app import email
 
@@ -56,13 +65,40 @@ def test_imports(client):
     import bs4
     import requests
 
+def test_init_load_user(client):
+    try:
+        from app import load_user
+        load_user(1)
+    except:
+        pass
+
+def test_index(client):
+    client.get('/', follow_redirects=True)
+    client.get('/index', follow_redirects=True)
+
+def test_search(client):
+    client.post('/search', follow_redirects=True)
+
+def test_register(client):
+    client.post('/register')
+
+def test_user_profile(client):
+    client.get('/user_profile')
+
+def test_movie_page(client):
+    pass
+#    client.get('/movie/<movie_id>')
+
+def test_models(client):
+    from app import models
+    u = models.User("test", "test@test.com", "test", True)
+
 def test_pdb(client):
     try:
         if os.environ["JAY_TEST"] == "True":
             pytest.set_trace()
     except:
         pass
-
 
 '''
 class spoiled_tomatillos_test_class(unittest.TestCase): 
