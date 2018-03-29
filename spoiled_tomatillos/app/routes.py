@@ -111,13 +111,17 @@ def user_profile():
     user = current_user
     return render_template('user_profile.html', user=user)
 
-
 # route for another user
 @app.route('/user_profile/<user_id>', methods=['GET', 'POST'])
 def other_user_profile(user_id):
     user = UserInfo.query.get(user_id)
     return render_template('user_profile.html', user=user)
 
+@app.route('/user_profile/<user_id>/edit', methods=['GET', 'POST'])
+def edit_user_profile(user_id):
+    user = current_user
+    user_id = user.get_id()
+    return render_template('edit_user_profile.html', user=user, user_id=user_id)
 
 @app.route('/movie/<movie_id>', methods=['GET', 'POST'])
 def movie_page(movie_id):
