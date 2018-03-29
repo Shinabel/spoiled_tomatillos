@@ -36,7 +36,7 @@ class dev_configs(object):
     """
     pass
 
-class test_configs(object):
+class test_config(object):
     """ Test configurations
     """
     TEST_STATUS = True

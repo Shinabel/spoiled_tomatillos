@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?><testsuite errors="1" failures="0" name="pytest" skips="0" tests="1" time="0.205"><testcase classname="" file="tests/test_app.py" name="tests.test_app" time="0"><error message="collection failure">/usr/local/lib/python3.6/site-packages/_pytest/python.py:411: in _importtestmodule
+    mod = self.fspath.pyimport(ensuresyspath=importmode)
+/usr/local/lib/python3.6/site-packages/py/_path/local.py:668: in pyimport
+    __import__(modname)
+E     File &quot;/Users/admin/classes/4500/team-53-spring18/spoiled_tomatillos/tests/test_app.py&quot;, line 12
+E       def client(app)
+E                     ^
+E   SyntaxError: invalid syntax</error></testcase></testsuite>
