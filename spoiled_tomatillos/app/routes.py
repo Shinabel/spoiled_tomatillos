@@ -17,7 +17,6 @@ from flask_login import login_user, logout_user, login_required, current_user
 import requests
 from bs4 import BeautifulSoup
 
-
 @app.route('/')
 def main():
     return redirect(url_for('login'))
@@ -69,9 +68,6 @@ def login():
             if sha256_crypt.verify(str(form.password.data), user.password) and user.confirmed:
                 login_user(user)  # login user to current user
 
-                # testing if current user works
-                print(current_user)
-
                 flash('Welcome {}!'.format(
                     form.username.data), 'info')
 
@@ -87,8 +83,6 @@ def register():
     form = RegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
         user = User(form.username.data, form.email.data, form.password.data, False)
-
-        # before adding into database, check if the email is already in the database.
 
         db.session.add(UserInfo(username=user.username, email=user.email,
                                 password=user.password, register_date=datetime.datetime.now(),
