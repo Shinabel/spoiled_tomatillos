@@ -108,6 +108,8 @@ class Friends(db.Model):
     __tablename__ = 'user.friends'
     __table_args__ = {'extend_existing': True}
 
+
+
     friendship_ID = db.Column('friendship_ID', db.Integer, primary_key=True)
     friend1_ID = db.Column('friend1_ID', db.Integer, db.ForeignKey('user_info.user_ID'))
     friend2_ID = db.Column('friend2_ID', db.Unicode, db.ForeignKey('user_info.user_ID'))
