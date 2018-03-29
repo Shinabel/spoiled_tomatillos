@@ -24,10 +24,8 @@ pipeline {
       }
       steps {
         echo "-----------Executing python tests-----------------"
-        dir ("spoiled_tomatillos/tests/") {
-          sh 'pip3 install -r requirements.txt'
-          sh 'pytest --verbose --junit-xml test-reports/results.xml'
-        }
+        sh 'pip3 install -r spoiled_tomatillos/tests/requirements.txt'
+        sh 'pytest --verbose --junit-xml test-reports/results.xml'
       }
       post {
         always {
