@@ -79,20 +79,25 @@ class UserInfo(db.Model):
     def is_anonymous(self):
         return False
 
-# crew table as python object
+# Critic ratings as Python object
 class Ratings(db.Model):
     __tablename__ = 'title.ratings'
     __table_args__ = {'extend_existing': True}
-    
-    rating_ID = db.Column('rating_ID', db.Integer, primary_key=True)
-    user_ID = db.Column('user_ID', db.Integer, db.ForeignKey('user_info.user_ID'))
-    movieId = db.Column('tconst', db.Unicode, db.ForeignKey('title.basics.tconst'))
-    ratings = db.Column('ratings', db.Float)
+
+    movieId = db.Column('tconst', db.Unicode, primary_key=True)
+    numVotes = db.Column('numVotes', db.Integer)
+    average_rating = db.Column('averageRating', db.Integer)
+
 
 # class that represents the user ratings from sql
 class UserRatings(db.Model):
     __tablename__ = 'user.ratings'
     __table_args__ = {'extend_existing': True}
+
+    rating_ID = db.Column('rating_ID', db.Integer, primary_key=True)
+    user_ID = db.Column('user_ID', db.Integer, db.ForeignKey('user_info.user_ID'))
+    movieId = db.Column('tconst', db.Unicode, db.ForeignKey('title.basics.tconst'))
+    ratings = db.Column('ratings', db.Float)
 
 # class that represents the user.friends table in sql, foreign keys from user ids
 class Friends(db.Model):
