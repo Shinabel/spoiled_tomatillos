@@ -4,6 +4,7 @@ import datetime
 from passlib.handlers.sha2_crypt import sha256_crypt
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, ResetForm, ChangePasswordForm
+
 from app.dbobjects import TitleBasic, UserInfo, Ratings, Roles, Actors, UserRatings, Crew, Friends
 from app.models import User
 
@@ -16,6 +17,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 # getting movie posters
 import requests
 from bs4 import BeautifulSoup
+
 
 @app.route('/')
 def main():
@@ -68,6 +70,11 @@ def login():
             if sha256_crypt.verify(str(form.password.data), user.password) and user.confirmed:
                 login_user(user)  # login user to current user
 
+                # testing if current user works
+                print(current_user)
+
+                flash('Login requested for user {}, remember_me={}'.format(
+                    form.username.data, user.confirmed))
                 flash('Welcome {}!'.format(
                     form.username.data), 'info')
 
@@ -83,7 +90,7 @@ def register():
     form = RegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
         user = User(form.username.data, form.email.data, form.password.data, False)
-
+        # before adding into database, check if the email is already in the database.
         db.session.add(UserInfo(username=user.username, email=user.email,
                                 password=user.password, register_date=datetime.datetime.now(),
                                 confirmed=False, confirmed_date=None))
@@ -170,6 +177,7 @@ def get_friend_list(user):
         else:
             friend_list.append(UserInfo.query.filter(UserInfo.user_ID == person.friend2_ID).first())
     return friend_list
+
 
 
 @app.route('/movie/<movie_id>', methods=['GET', 'POST'])

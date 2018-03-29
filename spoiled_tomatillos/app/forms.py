@@ -37,7 +37,6 @@ class RegistrationForm(Form):
     		return False
     	return True
 
-
 class ResetForm(Form):
     email = StringField(
         'email',
