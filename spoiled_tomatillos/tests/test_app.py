@@ -8,8 +8,11 @@ import pytest
 def app():
     pass
 
-class MyTestClass(unittest.TestCase): 
+@pytest.fixture
+def client(app):
+    return test_app.test_client()
 
+class MyTestClass(unittest.TestCase): 
     # initialization logic for the test suite declared in the test module
     # code that is executed before all tests in one test run
     @classmethod
