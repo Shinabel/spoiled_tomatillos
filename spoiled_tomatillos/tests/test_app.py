@@ -22,8 +22,8 @@ def client():
 def test_app(client):
     pass
 
-def test_db_object(client):
-    from app import db
+# def test_db_object(client):
+#     from app import db
 
 def test_login_manager(client):
     from app import login_manager
@@ -37,13 +37,26 @@ def test_test_config(client):
     from config import test_config
 
 def test_dbobjects(client):
-    from app import dbojects
+    from app import dbobjects
 
 def test_email(client):
     from app import email
 
+def test_imports(client):
+    import flask
+    import flask_sqlalchemy
+    import pymysql
+    import flask_mail
+    import flask_login
+    import werkzeug
+    import flask_wtf
+    import passlib
+    import wtforms
+    import itsdangerous
+    import bs4
+    import requests
+
 def test_pdb(client):
-    pytest.set_trace()
     try:
         if os.environ["JAY_TEST"] == "True":
             pytest.set_trace()
