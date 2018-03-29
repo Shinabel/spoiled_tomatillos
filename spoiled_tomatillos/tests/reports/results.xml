@@ -1,1 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?><testsuite errors="0" failures="0" name="pytest" skips="0" tests="1" time="1.279"><testcase classname="tests.test_app.MyTestClass" file="tests/test_app.py" line="40" name="test_equal_numbers" time="0.002658843994140625"></testcase></testsuite>
+<?xml version="1.0" encoding="utf-8"?><testsuite errors="0" failures="1" name="pytest" skips="0" tests="6" time="282.343"><testcase classname="tests.test_app" file="tests/test_app.py" line="21" name="test_app" time="0.5779340267181396"></testcase><testcase classname="tests.test_app" file="tests/test_app.py" line="24" name="test_db_object" time="0.0008492469787597656"></testcase><testcase classname="tests.test_app" file="tests/test_app.py" line="27" name="test_login_manager" time="0.0008008480072021484"></testcase><testcase classname="tests.test_app" file="tests/test_app.py" line="30" name="test_create_app" time="0.0015752315521240234"></testcase><testcase classname="tests.test_app" file="tests/test_app.py" line="34" name="test_test_config" time="0.0007066726684570312"></testcase><testcase classname="tests.test_app" file="tests/test_app.py" line="38" name="test_pdb" time="281.6157076358795"><failure message="bdb.BdbQuit">client = &lt;FlaskClient &lt;Flask &apos;app&apos;&gt;&gt;
+
+    def test_pdb(client):
+        pytest.set_trace()
+&gt;       try:
+
+test_app.py:41: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+test_app.py:41: in test_pdb
+    try:
+/usr/local/Cellar/python3/3.6.3/Frameworks/Python.framework/Versions/3.6/lib/python3.6/bdb.py:48: in trace_dispatch
+    return self.dispatch_line(frame)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;pdb.Pdb object at 0x110198358&gt;, frame = &lt;frame object at 0x1101a2248&gt;
+
+    def dispatch_line(self, frame):
+        if self.stop_here(frame) or self.break_here(frame):
+            self.user_line(frame)
+&gt;           if self.quitting: raise BdbQuit
+E           bdb.BdbQuit
+
+/usr/local/Cellar/python3/3.6.3/Frameworks/Python.framework/Versions/3.6/lib/python3.6/bdb.py:67: BdbQuit</failure></testcase></testsuite>
