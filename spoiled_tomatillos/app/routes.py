@@ -142,7 +142,6 @@ def unfriend(user_id):
     # render the template which change = -1 (removing a friend)
     return render_template('user_profile.html', user=user, change=-1, friend=-1, friend_list=friend_list)
 
-
 # route for another user
 @app.route('/user_profile/<user_id>', methods=['GET', 'POST'])
 def other_user_profile(user_id):
@@ -179,6 +178,11 @@ def get_friend_list(user):
     return friend_list
 
 
+@app.route('/user_profile/<user_id>/edit', methods=['GET', 'POST'])
+def edit_user_profile(user_id):
+    user = current_user
+    user_id = user.get_id()
+    return render_template('edit_user_profile.html', user=user, user_id=user_id)
 
 @app.route('/movie/<movie_id>', methods=['GET', 'POST'])
 def movie_page(movie_id):

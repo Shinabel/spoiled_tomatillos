@@ -5,14 +5,8 @@
 
 <body>
     <div id="main">
-        {% if change == 1 %}
-        Friend added!
-        {% elif change == -1 %}
-        Friend removed!
-        {% endif %}
 <section id="name_image">
-  <a href="/user_profile/{{ user.user_ID}}/edit"/>Edit</a>
-  <h1>{{user.username}}</h1>
+  <!-- <h1>{{user.username}}</h1> -->
 <img src="https://www.eharmony.co.uk/dating-advice/wp-content/uploads/2011/04/profilephotos-960x640.jpg" alt="propic" id="prof-pic">
 </section>
 <section id="bio">
@@ -22,26 +16,7 @@
   Suspendisse in justo eu magna luctus suscipit.</p>
 </section>
 <section id="movies">
-    {% if friend == -1 %}
-    <form action="/add_friend/{{ user.user_ID }}">
-    <input type="submit" value="friend" />
-    </form>
-    {% elif friend == 1 %}
-    <form action="/unfriend/{{ user.user_ID }}">
-    <input type="submit" value="Un-friend" />
-    </form>
-    {% else %}
-    {% endif %}
   <h1>Favorite Movies</h1>
-  <p class="text-left"><a href="#">See all</a></p>
-</section>
-        <section id="friends">
-  <h1>Friends</h1>
-            {% if friend_list is not none %}
-                {% for f in friend_list %}
-                <p><a href="/user_profile/{{ f.user_ID }}">{{ f.username }}</a></p>
-                {% endfor %}
-            {% endif %}
   <p class="text-left"><a href="#">See all</a></p>
 </section>
 <section id="reviews">
