@@ -313,6 +313,7 @@ def change_password(token):
 
     user = UserInfo.query.filter(UserInfo.email == email).first_or_404()
 
+
     if user.password_token is not None:
         form = ChangePasswordForm(request.form)
         if form.validate_on_submit():
@@ -320,6 +321,12 @@ def change_password(token):
             if user:
                 user.password = sha256_crypt.encrypt(str(form.password.data))
                 user.password_token = None
+                
+                subject = 'Password has been updated'
+                html = render_template('pwchange_confirm.html',
+                               username=user.username)
+
+                send_email(user.email, subject, html)
                 db.session.commit()
 
                 flash('Password successfully updated.', 'success')
