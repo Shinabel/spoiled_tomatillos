@@ -18,13 +18,14 @@ pipeline {
     stage('Test'){
       agent {
         docker {
-          image 'qnib/pytest'
+          image 'frolvlad/alpine-python3'
+          //image 'qnib/pytest'
         }
       }
       steps {
         echo "-----------Executing python tests-----------------"
         dir ("spoiled_tomatillos/tests/") {
-          sh 'pip3 install requirements.txt'
+          sh 'pip3 install -r requirements.txt'
           sh 'pytest --verbose --junit-xml test-reports/results.xml'
         }
       }
