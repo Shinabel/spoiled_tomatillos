@@ -18,16 +18,18 @@ pipeline {
     stage('Test'){
       agent {
         docker {
-          image 'qnib/pytest'
+          image 'frolvlad/alpine-python3'
+          //image 'qnib/pytest'
         }
       }
       steps {
         echo "-----------Executing python tests-----------------"
-        sh 'pytest --verbose --junit-xml test-reports/results.xml'
+        sh 'pip3 install -r spoiled_tomatillos/tests/requirements.txt'
+        sh 'cd spoiled_tomatillos/tests/ && pytest'
       }
       post {
         always {
-          junit 'test-reports/results.xml'
+          junit 'spoiled_tomatillos/tests/reports/results.xml'
         }
       }
     }
