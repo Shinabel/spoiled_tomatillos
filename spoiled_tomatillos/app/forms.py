@@ -27,8 +27,12 @@ class RegistrationForm(Form):
     	initial_validation = super(RegistrationForm, self).validate()
     	if not initial_validation:
     		return False
-    	user = UserInfo.query.filter_by(email=self.email.data).first()
-    	if user:
+    	user_name = UserInfo.query.filter_by(username=self.username.data).first()
+    	if user_name:
+    		self.username.errors.append("Username is already taken")
+    		return False
+    	email_address = UserInfo.query.filter_by(email=self.email.data).first()
+    	if email_address:
     		self.email.errors.append("Email already used")
     		return False
     	return True
