@@ -42,11 +42,11 @@ def test_dbobjects(client):
 
 def test_user_info_methods(client):
     from app import dbobjects
-    ui = dbobjects.UserInfo
-    ui.is_active
-    ui.get_id
-    ui.is_authenticated
-    ui.is_anonymous
+    ui = dbobjects.UserInfo()
+    ui.is_active()
+    ui.get_id()
+    ui.is_authenticated()
+    ui.is_anonymous()
 
 def test_email(client):
     from app import email
@@ -102,8 +102,20 @@ def test_bad_token(client):
     from app import token
     token.confirm_token(True)
 
-#def test_reset_form_validate(client):
-#    pytest.set_trace()
+def test_reset_form_validate(client):
+    from app import forms
+    rs = forms.ResetForm()
+    rs.validate()
+    rs.check_email_registered("lok.j@husky.neu.edu")
+    rs.check_initial_validation(True)
+
+def test_register_form_validate(client):
+    from app import forms
+    rs = forms.RegistrationForm()
+    rs.validate()
+    rs.check_initial_validation(True)
+    rs.check_email_registered("lok.j@husky.neu.edu")
+    rs.check_username_registered("admin")
 
 def test_pdb(client):
     try:
