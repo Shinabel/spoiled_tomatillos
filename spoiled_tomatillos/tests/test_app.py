@@ -76,8 +76,17 @@ def test_index(client):
     client.get('/', follow_redirects=True)
     client.get('/index', follow_redirects=True)
 
-def test_search(client):
-    client.post('/search', follow_redirects=True)
+def test_default_search(client):
+    client.get('/search')
+
+def test_movie_search(client):
+    client.post('/search', follow_redirects=True,
+            content_type="application/x-www-form-urlencoded",
+            data={'search': 'batman'})
+
+def test_user_search(client):
+    client.post('/search', content_type="application/x-www-form-urlencoded",
+            data={'search': 'admin'})
 
 def test_register(client):
     client.post('/register')
