@@ -39,8 +39,8 @@ def search():
             .order_by(UserInfo.username).all()
         user_data = []
         for r in user_results:
-                # format the result, ensuring properties are strings
-                user_data.append({"name": str(r.username), "email": str(r.email), "id": r.user_ID})
+            # format the result, ensuring properties are strings
+            user_data.append({"name": str(r.username), "email": str(r.email), "id": r.user_ID})
 
         # the movies with titles like the string provided, limit to 300
         results = TitleBasic.query.filter(TitleBasic.title.like('%' + str(request.form['search']) + '%'))\
