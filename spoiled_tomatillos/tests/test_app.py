@@ -20,6 +20,15 @@ def client():
     client = app.test_client()
     yield client
 
+@pytest.fixture
+def tester_client():
+    from app import app
+    Config.WTF_CSRF_ENABLED = False
+    app.config.from_object(Config)
+    client = app.test_client()
+    yield client
+
+
 def test_app(client):
     pass
 
@@ -28,6 +37,21 @@ def test_app(client):
 
 def test_login_manager(client):
     from app import login_manager
+
+def test_admin_login(tester_client):
+    tester_client.post('/login', content_type='application/x-www-form-urlencoded',
+        follow_redirects=True,
+        data={'username': 'admin', 'password': 'admin'})
+
+def test_account_needs_verify(tester_client):
+    tester_client.post('/login', content_type='application/x-www-form-urlencoded',
+        follow_redirects=True,
+        data={'username': 'do_not_finish', 'password': 'blah'})
+
+def test_invalid_user_pass(tester_client):
+    tester_client.post('/login', content_type='application/x-www-form-urlencoded',
+        follow_redirects=True,
+        data={'username': 'holy', 'password': 'moly'})
 
 # def test_create_app(client):
 #     from app import create_app
