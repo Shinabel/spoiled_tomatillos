@@ -20,6 +20,15 @@ def client():
     client = app.test_client()
     yield client
 
+@pytest.fixture
+def tester_client():
+    from app import app
+    Config.WTF_CSRF_ENABLED = False
+    app.config.from_object(Config)
+    client = app.test_client()
+    yield client
+
+
 def test_app(client):
     pass
 
@@ -28,6 +37,21 @@ def test_app(client):
 
 def test_login_manager(client):
     from app import login_manager
+
+def test_admin_login(tester_client):
+    tester_client.post('/login', content_type='application/x-www-form-urlencoded',
+        follow_redirects=True,
+        data={'username': 'admin', 'password': 'admin'})
+
+def test_account_needs_verify(tester_client):
+    tester_client.post('/login', content_type='application/x-www-form-urlencoded',
+        follow_redirects=True,
+        data={'username': 'do_not_finish', 'password': 'blah'})
+
+def test_invalid_user_pass(tester_client):
+    tester_client.post('/login', content_type='application/x-www-form-urlencoded',
+        follow_redirects=True,
+        data={'username': 'holy', 'password': 'moly'})
 
 # def test_create_app(client):
 #     from app import create_app
@@ -42,11 +66,11 @@ def test_dbobjects(client):
 
 def test_user_info_methods(client):
     from app import dbobjects
-    ui = dbobjects.UserInfo
-    ui.is_active
-    ui.get_id
-    ui.is_authenticated
-    ui.is_anonymous
+    ui = dbobjects.UserInfo()
+    ui.is_active()
+    ui.get_id()
+    ui.is_authenticated()
+    ui.is_anonymous()
 
 def test_email(client):
     from app import email
@@ -76,8 +100,17 @@ def test_index(client):
     client.get('/', follow_redirects=True)
     client.get('/index', follow_redirects=True)
 
-def test_search(client):
-    client.post('/search', follow_redirects=True)
+def test_default_search(client):
+    client.get('/search')
+
+def test_movie_search(client):
+    client.post('/search', follow_redirects=True,
+            content_type="application/x-www-form-urlencoded",
+            data={'search': 'batman'})
+
+def test_user_search(client):
+    client.post('/search', content_type="application/x-www-form-urlencoded",
+            data={'search': 'admin'})
 
 def test_register(client):
     client.post('/register')
@@ -102,8 +135,20 @@ def test_bad_token(client):
     from app import token
     token.confirm_token(True)
 
-#def test_reset_form_validate(client):
-#    pytest.set_trace()
+def test_reset_form_validate(client):
+    from app import forms
+    rs = forms.ResetForm()
+    rs.validate()
+    rs.check_email_registered("lok.j@husky.neu.edu")
+    rs.check_initial_validation(True)
+
+def test_register_form_validate(client):
+    from app import forms
+    rs = forms.RegistrationForm()
+    rs.validate()
+    rs.check_initial_validation(True)
+    rs.check_email_registered("lok.j@husky.neu.edu")
+    rs.check_username_registered("admin")
 
 def test_pdb(client):
     try:

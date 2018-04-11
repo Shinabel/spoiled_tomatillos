@@ -3,7 +3,6 @@ from wtforms import Form, StringField, PasswordField, BooleanField, SubmitField,
 from wtforms.validators import DataRequired, Length, EqualTo, Email
 from app.dbobjects import UserInfo
 
-
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -23,34 +22,59 @@ class RegistrationForm(Form):
         'I acknowledge that I have read and fully understand the terms and conditions of the site',
         [validators.Required()])
 
+    def check_initial_validation(self, iv):
+        if not iv:
+            return False
+        return True
+
+    def check_username_registered(self, user):
+        if user:
+            self.username.errors.append("Username is already taken")
+            return False
+        return True
+
+    def check_email_registered(self, email_address):
+        if email_address:
+            self.email.errors.append("Email already used")
+            return False
+        return True
+
     def validate(self):
-    	initial_validation = super(RegistrationForm, self).validate()
-    	if not initial_validation:
-    		return False
+    	iv = super(RegistrationForm, self).validate()
+    	init_valid = self.check_initial_validation(iv)
+
     	user_name = UserInfo.query.filter_by(username=self.username.data).first()
-    	if user_name:
-    		self.username.errors.append("Username is already taken")
-    		return False
+    	check_username = self.check_username_registered(user_name)
+
     	email_address = UserInfo.query.filter_by(email=self.email.data).first()
-    	if email_address:
-    		self.email.errors.append("Email already used")
-    		return False
-    	return True
+    	check_email = self.check_email_registered(email_address)
+
+    	return init_valid and check_username and check_email
 
 class ResetForm(Form):
     email = StringField(
         'email',
         validators=[DataRequired(), Email(message=None), Length(min=6, max=255)])
 
-    def validate(self):
-        initial_validation = super(ResetForm, self).validate()
-        if not initial_validation:
-            return False
-        user = UserInfo.query.filter_by(email=self.email.data).first()
-        if not user:
-            self.email.errors.append("This email is not registered")
+    def check_initial_validation(self, iv):
+        if not iv:
             return False
         return True
+
+    def check_email_registered(self, user):
+        if not user:
+            self.email.errors.append("Email is not registered, please register")
+            return False
+        return True
+
+    def validate(self):
+        iv = super(ResetForm, self).validate()
+        init_valid = self.check_initial_validation(iv)
+
+        user = UserInfo.query.filter_by(email=self.email.data).first()
+        check_email = self.check_email_registered(user)
+
+        return init_valid and check_email
 
 
 class ChangePasswordForm(FlaskForm):
