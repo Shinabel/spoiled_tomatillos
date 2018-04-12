@@ -1,6 +1,6 @@
-### Running application locally instructions
-To run the Flask application locally:\newline
-1. cd into your Spoiled Tomatillos directory 
+### Instructions to run application locally
+To run the Flask application locally:
+1. cd into your Spoiled Tomatillos directory
 2. set "export FLASK_APP=cs4500.py"
 3. "export APP_MAIL_USERNAME="spoiledtomatillos53@gmail.com""
 4. "export APP_MAIL_PASSWORD="cs4500project""
