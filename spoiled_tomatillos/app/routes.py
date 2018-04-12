@@ -171,8 +171,8 @@ def other_user_profile(user_id):
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
-    form = EditProfileForm()
-    if form.validate_on_submit():
+    form = EditProfileForm(request.form)
+    if form.validate():
         current_user.username = form.username.data
         current_user.about_me = form.about_me.data
         current_user.favorite_movies = form.favorite_movies.data

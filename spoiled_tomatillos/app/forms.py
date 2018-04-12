@@ -1,7 +1,10 @@
+from operator import and_
 from flask_wtf import FlaskForm
 from wtforms import Form, StringField, PasswordField, BooleanField, SubmitField, validators, TextAreaField
 from wtforms.validators import DataRequired, Length, EqualTo, Email
 from app.dbobjects import UserInfo
+from flask_login import current_user
+
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -51,6 +54,7 @@ class RegistrationForm(Form):
 
     	return init_valid and check_username and check_email
 
+
 class ResetForm(Form):
     email = StringField(
         'email',
@@ -84,8 +88,34 @@ class ChangePasswordForm(FlaskForm):
     ])
     confirm = PasswordField('Confirm Password')
 
-class EditProfileForm(FlaskForm):
+
+# form for editing a user's information
+class EditProfileForm(Form):
     username = StringField('Username', validators=[DataRequired()])
     about_me = TextAreaField('About Me', validators=[Length(min=0, max=255)])
     favorite_movies = TextAreaField('Favorite Movies', validators=[Length(min=0, max=255)])
     submit = SubmitField('Submit')
+
+    def check_initial_validation(self, iv):
+        if not iv:
+            print('iv issue')
+            return False
+        return True
+
+    # check if username is taken.
+    def check_username_registered(self, user):
+        if user:
+            print('username issue')
+            self.username.errors.append("Username is already taken")
+            return False
+        return True
+
+    # overwrite validate function for form
+    def validate(self):
+        iv = super(EditProfileForm, self).validate()
+        init_valid = self.check_initial_validation(iv)
+
+        user_name = UserInfo.query.filter(and_(UserInfo.username == self.username.data, UserInfo.user_ID != current_user.user_ID)).first()
+        check_username = self.check_username_registered(user_name)
+        print('got here')
+        return init_valid and check_username
