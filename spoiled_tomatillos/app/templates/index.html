@@ -10,31 +10,67 @@
       <div class="box">
         <div class="head">
           <h2>TOP RATED MOVIES</h2>
-          <p class="text-right"><a href="#">See all</a></p>
         </div>
         <div class="movie">
           <!-- Movie info Possibly use for loop to iterate through possibly [:5]!--> 
+        {% for rec in top_rated %}
+            <p><a href="/movie/{{ rec[0] }}">{{ rec[1] }}</a></p>
+        {% endfor %}
         </div>
         
         <div class="cl">&nbsp;</div>
       </div>
       <div class="box">
         <div class="head">
-          <h2>RECOMMENDATION</h2>
-          <p class="text-right"><a href="#">See all</a></p>
+          <h2>RECOMMENDED</h2>
         </div>
         <div class="movie">
           <!-- Movie info Possibly use for loop to iterate through!-->
+          {% for rec in user_recs %}
+            <p><a href="/movie/{{ rec[0] }}">{{ rec[1] }}</a></p>
+          {% endfor %}
         </div>
         <div class="cl">&nbsp;</div>
       </div>
       <div class="box">
         <div class="head">
-          <h2>SOME CATEGORY</h2>
-          <p class="text-right"><a href="#">See all</a></p>
+          <h2>RECOMENDATIONS FROM FRIENDS</h2>
         </div>
         <div class="movie">
           <!-- Movie info Possibly use for loop to iterate through!-->
+          {% for rec in friend_recs %}
+            <p><a href="/movie/{{ rec[0] }}">{{ rec[1] }}</a></p>
+        {% endfor %}
+        </div>
+        <div class="cl">&nbsp;</div>
+      </div>
+      <div class="box">
+        <div class="head">
+          <h2>YOUR FAVORITES</h2>
+        </div>
+        <div class="movie">
+          <!-- Movie info Possibly use for loop to iterate through!-->
+          {% for rec in favorites %}
+            <p><a href="/movie/{{ rec[0] }}">{{ rec[1] }}</a></p>
+          {% endfor %}
+        </div>
+        <div class="cl">&nbsp;</div>
+      </div>
+      <div class="box">
+        <div class="head">
+          <h2>YOU RECENTLY RATED</h2>
+        </div>
+        <div class="movie">
+          <!-- Movie info Possibly use for loop to iterate through!-->
+          {% for rec in recently_rated %}
+            <p><a href="/movie/{{ rec[0] }}">{{ rec[1] }}</a></p>
+          {% endfor %}
+        </div>
+        <div class="cl">&nbsp;</div>
+      </div>
+      <div class="box">
+        <div class="head">
+          <h2><a href="/movie/{{ surprise }}">SURPRISE ME</a></h2>
         </div>
         <div class="cl">&nbsp;</div>
       </div>

@@ -5,15 +5,17 @@ from passlib.handlers.sha2_crypt import sha256_crypt
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, ResetForm, ChangePasswordForm
 
-from app.dbobjects import TitleBasic, UserInfo, Ratings, Roles, Actors, UserRatings, Crew, Friends
+from app.dbobjects import TitleBasic, UserInfo, Ratings, Roles, Actors, UserRatings, Crew, Friends, Favorites
 from app.models import User
 
 from app.token import generate_confirmation_token, confirm_token
 from app.email import send_email
 
-from sqlalchemy import or_
+from sqlalchemy import or_, func
 from flask_login import login_user, logout_user, login_required, current_user
 from app.forms import EditProfileForm
+
+from random import shuffle
 
 
 # getting movie posters
@@ -28,8 +30,52 @@ def main():
 
 @app.route('/index')
 def index():
+    #Fix user with no data
+    conn = db.engine.raw_connection()
+    cur = conn.cursor()
+
+    # Use database procedure to generate recommendations for user
+    cur.callproc('get_user_recommendations', [current_user.user_ID])
+    user_recs = list(cur.fetchall())
+    shuffle(user_recs)
+    user_recs = user_recs[:5]
+
+    # Use database procedure to generate recommendations from friends
+    cur.callproc('get_friend_recommendations', [current_user.user_ID])
+    friend_recs = list(cur.fetchall())
+    shuffle(friend_recs)
+    friend_recs = friend_recs[:5]
+
+    #top_rated
+    cur.callproc('get_top_rated', [])
+    top_rated = list(cur.fetchall())
+    shuffle(top_rated)
+    top_rated = top_rated[:5]
+
+
+    #new_releases
+
+    #your_recent_ratings
+    cur.callproc('get_your_recent_ratings', [current_user.user_ID])
+    recently_rated = list(cur.fetchall())
+
+    #your_favorites
+    cur.callproc('get_your_favorites', [current_user.user_ID])
+    favorites = list(cur.fetchall())
+
+    #surprise
+    cur.callproc('generate_surprise', [])
+    surprise = list(cur.fetchall())
+    surprise = surprise[0][0]
+
+    # generate recommendations
+    #UserInfo.query.filter(UserInfo.username.like('%' + 'Harry' + '%'))\
+    #        .order_by(UserInfo.username).all()
+    #
+
+
     # print current_app.root_path
-    return render_template('index.html')
+    return render_template('index.html', user_recs=user_recs, friend_recs=friend_recs, top_rated=top_rated, recently_rated=recently_rated, favorites=favorites, surprise=surprise)
 
 
 # route for the search method (so far we can search movies)
@@ -75,8 +121,6 @@ def login():
                 # testing if current user works
                 print(current_user)
 
-                flash('Login requested for user {}, remember_me={}'.format(
-                    form.username.data, user.confirmed))
                 flash('Welcome {}!'.format(
                     form.username.data), 'info')
 
@@ -208,15 +252,38 @@ def movie_page(movie_id):
 
     if request.method == "POST":
         if current_user.is_authenticated:
-            original_rating = UserRatings.query.filter(
-                UserRatings.movieId == movie_id, UserRatings.user_ID == current_user.user_ID).first()
-            if original_rating is None:
-                db.session.add(
-                    UserRatings(user_ID=current_user.get_id(), movieId=movie_id, ratings=request.form['user-rating']))
-                db.session.commit()
+
+            if 'user-rating' in request.form:
+                original_rating = UserRatings.query.filter(
+                    UserRatings.movieId == movie_id, UserRatings.user_ID == current_user.user_ID).first()
+                if original_rating is None:
+                    db.session.add(
+                        UserRatings(user_ID=current_user.get_id(), movieId=movie_id, ratings=request.form['user-rating']))
+                    db.session.commit()
+                    flash('Your rating has been recorded.', 'info')
+                else:
+                    original_rating.ratings = request.form['user-rating']
+                    db.session.commit()
+                    flash('Your rating has been updated.', 'info')
             else:
-                original_rating.ratings = request.form['user-rating']
-                db.session.commit()
+                if request.form['favorite'] == 'true':
+                    try:
+                        db.session.add(
+                            Favorites(user_ID=current_user.get_id(), movieId=movie_id)
+                        )
+                        db.session.commit()
+                        flash('This movie has been favorited.', 'info')
+                    except:
+                        flash('This movie has already been favorited.', 'warning')
+                else:
+                    try:
+                        db.session.delete(
+                            Favorites.query.filter_by(user_ID=current_user.get_id(), movieId=movie_id).one()
+                        )
+                        db.session.commit()
+                        flash('This movie has been unfavorited.', 'info')
+                    except:
+                        flash('This movie has already been unfavorited.', 'warning')
         else:
             flash('You must be signed in to rate movies.', 'warning')
 
@@ -267,17 +334,25 @@ def movie_page(movie_id):
         movie_description = soup.find("div", class_="summary_text").get_text().strip()
         if movie_description == "Add a Plot »":
             movie_description = "No description."
+    
+    current_user_favorite = None
+
+    current_user_favorite_row = Favorites.query.filter(
+        Favorites.movieId == movie_id, Favorites.user_ID == current_user.user_ID).first()
+
+    if current_user.is_authenticated and current_user_favorite_row is not None:
+        current_user_favorite = True
 
     # fill rating info with NA if not available
     if rating is not None:
         return render_template('movie.html', movie=movie, image=image_link, desc=movie_description, allActors=allActors,
                                rating_count=rating.numVotes, user_rating=user_rating,
-                               current_user_rating=current_user_rating,
+                               current_user_rating=current_user_rating, current_user_favorite=current_user_favorite,
                                rating=rating.average_rating, director_name=director_name, writer_name=writer_name)
     else:
         return render_template('movie.html', movie=movie, image=image_link, desc=movie_description, allActors=allActors,
                                rating_count="NA", user_rating=user_rating,
-                               current_user_rating=current_user_rating,
+                               current_user_rating=current_user_rating, current_user_favorite=current_user_favorite,
                                rating="NA", director_name=director_name, writer_name=writer_name)
 
 

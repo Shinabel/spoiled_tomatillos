@@ -14,6 +14,15 @@
             </div>
     
             <div class="col-sm-8">
+                {% if current_user_favorite is none %}
+                <div>
+                    <i class="fa fa-heart-o favorite"></i>
+                </div>  
+                {% else %}
+                <div>
+                    <i class="fa fa-heart unfavorite"></i>
+                </div>
+                {% endif %}
                 <p>{{ desc }}</p>
             </div>
         </div>
@@ -73,22 +82,30 @@
             $(".rating span").removeClass('checked');
             $(this).parent().addClass('checked');
         });
+
+        $('.favorite').click(function () {
+            post(window.location.href, "favorite", true);
+        });
+
+        $('.unfavorite').click(function () {
+            post(window.location.href, "favorite", false);
+        });
     
         $('input:radio').change(
           function(){
             var userRating = this.value;
-            post(window.location.href, userRating);
+            post(window.location.href, "user-rating", userRating);
         }); 
     });
 
-    function post(path, parameters) {
+    function post(path, name, parameters) {
         var form = $('<form></form>');
 
         form.attr("method", "post");
         form.attr("action", path);
         var field = $('<input></input>');
         field.attr("type", "hidden");
-        field.attr("name", "user-rating");
+        field.attr("name", name);
         field.attr("value", parameters);
         form.append(field);
 
