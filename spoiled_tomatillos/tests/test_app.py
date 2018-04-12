@@ -234,3 +234,14 @@ def test_pdb(client):
             pytest.set_trace()
     except:
         pass
+
+
+def test_edit_profile(tester_client):
+    tester_client.post('/login', content_type='application/x-www-form-urlencoded',
+        follow_redirects=True,
+        data={'username': 'admin', 'password': 'admin'})
+    tester_client.post('/edit_profile',
+        content_type='application/x-www-form-urlencoded',
+        follow_redirects=True,
+        data={'username':'admin', 'about_me':'', 'favorite_movies':'', 'submit':'yes'})
+    tester_client.post('/logout')
