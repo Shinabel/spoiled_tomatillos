@@ -157,9 +157,17 @@ def register():
 @app.route('/user_profile', methods=['GET', 'POST'])
 @login_required
 def user_profile():
+    # Fix user with no data
+    conn = db.engine.raw_connection()
+    cur = conn.cursor()
+
     user = current_user
     friend_list = get_friend_list(user)
-    return render_template('user_profile.html', user=user, friend=0, friend_list=friend_list)
+
+    cur.callproc('get_your_favorites', [current_user.user_ID])
+    favorites = list(cur.fetchall())
+
+    return render_template('user_profile.html', user=user, friend=0, friend_list=friend_list, favorites=favorites)
 
 
 # adding a friend
