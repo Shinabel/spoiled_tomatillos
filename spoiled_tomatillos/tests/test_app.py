@@ -2,6 +2,7 @@ import unittest
 import os
 from config import Config
 import pytest
+import random
 #import ipdb
 
 '''
@@ -28,34 +29,25 @@ def tester_client():
     client = app.test_client()
     yield client
 
-
+'''
+@pytest.fixture
+def logged_in_user(request, test_user):
+    flask_login.login_user(test_user)
+    request.addfinalizer(flask_login.logout_user)
+'''  
 def test_app(client):
     pass
 
 # def test_db_object(client):
 #     from app import db
 
-def test_login_manager(client):
-    from app import login_manager
-
-def test_admin_login(tester_client):
-    tester_client.post('/login', content_type='application/x-www-form-urlencoded',
-        follow_redirects=True,
-        data={'username': 'admin', 'password': 'admin'})
-
-def test_account_needs_verify(tester_client):
-    tester_client.post('/login', content_type='application/x-www-form-urlencoded',
-        follow_redirects=True,
-        data={'username': 'do_not_finish', 'password': 'blah'})
-
-def test_invalid_user_pass(tester_client):
-    tester_client.post('/login', content_type='application/x-www-form-urlencoded',
-        follow_redirects=True,
-        data={'username': 'holy', 'password': 'moly'})
-
 # def test_create_app(client):
 #     from app import create_app
 #     create_app()
+
+###
+# Testing configuration and database / app instantiation
+###
 
 def test_test_config(client):
     from config import Config
@@ -96,6 +88,39 @@ def test_init_load_user(client):
     except:
         pass
 
+###
+# Testing login 
+###
+
+def test_login_manager(client):
+    from app import login_manager
+
+def test_admin_login(tester_client):
+    tester_client.post('/login', content_type='application/x-www-form-urlencoded',
+        follow_redirects=True,
+        data={'username': 'admin', 'password': 'admin'})
+
+def test_account_needs_verify(tester_client):
+    tester_client.post('/login', content_type='application/x-www-form-urlencoded',
+        follow_redirects=True,
+        data={'username': 'do_not_finish', 'password': 'blah'})
+
+def test_invalid_user_pass(tester_client):
+    tester_client.post('/login', content_type='application/x-www-form-urlencoded',
+        follow_redirects=True,
+        data={'username': 'holy', 'password': 'moly'})
+'''
+def test_logout(tester_client):
+    tester_client.post('/login', content_type='application/x-www-form-urlencoded',
+        follow_redirects=True,
+        data={'username': 'admin', 'password': 'admin'})
+    tester_client.post('/logout')
+'''
+
+###
+# Test home page and search features
+###
+
 def test_index(client):
     client.get('/', follow_redirects=True)
     client.get('/index', follow_redirects=True)
@@ -112,8 +137,19 @@ def test_user_search(client):
     client.post('/search', content_type="application/x-www-form-urlencoded",
             data={'search': 'admin'})
 
-def test_register(client):
+###
+# Test registration
+###
+
+def test_base_register(client):
     client.post('/register')
+
+def test_valid_register(tester_client):
+    r = random.randint(1, 9999999)
+    tester_client.post('/register',
+            content_type="application/x-www-form-urlencoded",
+            data={'username': "testing{}".format(r), 'email': "{}@adfasdf.com".format(r),
+                'password': "asdfbasdf", 'confirm': "asdfbasdf", "accept_tos": "y"})
 
 def test_user_profile(client):
     client.get('/user_profile')
@@ -126,6 +162,10 @@ def test_models(client):
     from app import models
     u = models.User("test", "test@test.com", "test", True)
 
+###
+# Test token file
+###
+
 def test_tokens(client):
     from app import token
     tok = token.generate_confirmation_token("test@test.com")
@@ -135,6 +175,9 @@ def test_bad_token(client):
     from app import token
     token.confirm_token(True)
 
+###
+# Test form file
+###
 def test_reset_form_validate(client):
     from app import forms
     rs = forms.ResetForm()
@@ -156,4 +199,3 @@ def test_pdb(client):
             pytest.set_trace()
     except:
         pass
-
