@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import Form, StringField, PasswordField, BooleanField, SubmitField, validators
+from wtforms import Form, StringField, PasswordField, BooleanField, SubmitField, validators, TextAreaField
 from wtforms.validators import DataRequired, Length, EqualTo, Email
 from app.dbobjects import UserInfo
 
@@ -83,3 +83,8 @@ class ChangePasswordForm(FlaskForm):
         validators.EqualTo('confirm', message='Passwords must match')
     ])
     confirm = PasswordField('Confirm Password')
+
+class EditProfileForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    about_me = TextAreaField('About me', validators=[Length(min=0, max=255)])
+    submit = SubmitField('Submit')
