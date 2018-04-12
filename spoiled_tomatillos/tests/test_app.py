@@ -64,6 +64,7 @@ def test_user_info_methods(client):
     ui.get_id()
     ui.is_authenticated()
     ui.is_anonymous()
+    ui.__repr__()
 
 def test_email(client):
     from app import email
@@ -158,10 +159,6 @@ def test_valid_register_with_confirm_email(tester_client):
 
 def test_user_profile(client):
     client.get('/user_profile')
-
-def test_movie_page(client):
-    pass
-#    client.get('/movie/<movie_id>')
 
 def test_models(client):
     from app import models
