@@ -3,7 +3,7 @@ from passlib.hash import sha256_crypt
 from app import app, db
 
 
-class User:
+class User():
     def __init__(self, username, email, password, confirmed):
         self.id = id
         self.username = username

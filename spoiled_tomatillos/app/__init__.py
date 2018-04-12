@@ -1,6 +1,7 @@
 from flask import Flask
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 import pymysql
 from flask_mail import Mail
 from flask_login import LoginManager
@@ -20,6 +21,7 @@ app.config.from_object(Config)
 
 logging.info("Initializing db using SQLAlchemy")
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 logging.info("Creating login manager")
 login_manager = LoginManager()
@@ -39,7 +41,7 @@ def load_user(user_id):
     return UserInfo.query.filter(UserInfo.user_ID == int(user_id)).first()
 
 logging.info("Importing flask routes")
-from app import routes
+from app import routes, models
 
 # def create_app(config=None):
 #     """ Factory method creating app

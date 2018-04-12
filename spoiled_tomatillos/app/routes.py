@@ -13,6 +13,8 @@ from app.email import send_email
 
 from sqlalchemy import or_
 from flask_login import login_user, logout_user, login_required, current_user
+from app.forms import EditProfileForm
+
 
 # getting movie posters
 import requests
@@ -109,6 +111,7 @@ def register():
 
 # current user's profile
 @app.route('/user_profile', methods=['GET', 'POST'])
+@login_required
 def user_profile():
     user = current_user
     friend_list = get_friend_list(user)
@@ -165,6 +168,21 @@ def other_user_profile(user_id):
     # render the template which change = 0 (no friend or unfriend)
     return render_template('user_profile.html', user=user, friend=friend, change=0, friend_list=friend_list)
 
+@app.route('/edit_profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    form = EditProfileForm()
+    if form.validate_on_submit():
+        current_user.username = form.username.data
+        current_user.about_me = form.about_me.data
+        db.session.commit()
+        flash('Your changes have been saved.')
+        return redirect(url_for('edit_profile'))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.about_me.data = current_user.about_me
+    return render_template('edit_profile.html', title='Edit Profile',
+                           form=form)
 
 # get the friend list for a user
 def get_friend_list(user):
@@ -176,13 +194,6 @@ def get_friend_list(user):
         else:
             friend_list.append(UserInfo.query.filter(UserInfo.user_ID == person.friend2_ID).first())
     return friend_list
-
-
-@app.route('/user_profile/<user_id>/edit', methods=['GET', 'POST'])
-def edit_user_profile(user_id):
-    user = current_user
-    user_id = user.get_id()
-    return render_template('edit_user_profile.html', user=user, user_id=user_id)
 
 @app.route('/movie/<movie_id>', methods=['GET', 'POST'])
 def movie_page(movie_id):
@@ -325,7 +336,7 @@ def change_password(token):
             if user:
                 user.password = sha256_crypt.encrypt(str(form.password.data))
                 user.password_token = None
-                
+
                 subject = 'Password has been updated'
                 html = render_template('pwchange_confirm.html',
                                username=user.username)

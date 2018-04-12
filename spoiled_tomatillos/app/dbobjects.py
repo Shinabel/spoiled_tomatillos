@@ -3,6 +3,7 @@ from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from app import db, app
+from hashlib import md5
 
 # movie titles table as python object
 class TitleBasic(db.Model):
@@ -54,7 +55,7 @@ class Roles(db.Model):
     characters = db.Column('characters', db.Unicode)
 
 # class to represent a user from sql
-class UserInfo(db.Model):
+class UserInfo(db.Model, UserMixin):
     __tablename__ = 'user_info'
     __table_args__ = {'extend_existing': True}
 
@@ -66,6 +67,7 @@ class UserInfo(db.Model):
     confirmed = db.Column('confirmed', db.Boolean, nullable=False, default=False)
     confirmed_date = db.Column('confirmed_date', db.DateTime)
     password_token = db.Column('password_token', db.Unicode)
+    about_me = db.Column(db.String(140))
 
     def is_active(self):
         return True
@@ -75,9 +77,17 @@ class UserInfo(db.Model):
 
     def is_authenticated(self):
         return True
-      
+
     def is_anonymous(self):
         return False
+
+    def __repr__(self):
+        return '<User {}>'.format(self.username)
+
+    def avatar(self, size):
+        digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
+            digest, size)
 
 # Critic ratings as Python object
 class Ratings(db.Model):

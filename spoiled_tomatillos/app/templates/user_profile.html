@@ -11,18 +11,21 @@
         Friend removed!
         {% endif %}
 <section id="name_image">
-    <button type="button">Edit Profile</button>
+    {% if user == current_user %}
+    <p><a href="{{ url_for('edit_profile') }}">Edit your profile</a></p>
+    {% endif %}
     <form>
       <input type="button" value="Change Password" onclick="window.location.href='{{url_for('reset_password')}}'" />
     </form>
-  <h1>{{user.username}}</h1>
-<img src="https://www.eharmony.co.uk/dating-advice/wp-content/uploads/2011/04/profilephotos-960x640.jpg" alt="propic" id="prof-pic">
+  <tr valign="top">
+  <h1>User: {{ user.username }}</h1>
+<td><img src="{{ user.avatar(128) }}"></td>
 </section>
 <section id="bio">
-<p> Profile Description: Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam,
-  a cursus ipsum ante quis turpis. Nulla facilisi. Ut fringilla. Suspendisse potenti.
-  Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices.
-  Suspendisse in justo eu magna luctus suscipit.</p>
+  {% if user.about_me %}
+  <h1>About Me</h1>
+  <p>{{ user.about_me }}</p>
+  {% endif %}
 </section>
 <section id="movies">
     {% if friend == -1 %}
