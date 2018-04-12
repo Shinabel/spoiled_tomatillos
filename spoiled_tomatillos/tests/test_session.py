@@ -23,8 +23,27 @@ class SpoiledTestClass(unittest.TestCase):
     def logout(self):
         return self.client.get('/logout')
 
-    def test_login_logout(self):
+    def add_friends(self):
+        self.client.get('/add_friend/3')
+
+    def remove_friend(self):
+        self.client.get('/unfriend/3')
+
+    def other_profile(self, pid):
+        self.client.get('/user_profile/{}'.format(pid))
+
+    def get_edit_page(self):
+        self.client.get('/user_profile/0/edit')
+
+    def test_session(self):
         self.login('admin', 'admin')
+        self.add_friends()
+        self.get_edit_page()
+        self.other_profile(0)
+        self.other_profile(3)
+        self.other_profile(8)
+        self.remove_friend()
+        self.remove_friend()
         self.logout()
 
 if __name__ == "__main__":
