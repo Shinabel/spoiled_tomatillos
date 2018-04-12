@@ -4,6 +4,7 @@ from config import Config
 import pytest
 from app import app
 
+
 class SpoiledTestClass(unittest.TestCase):
 
     def setUp(self):
@@ -44,11 +45,8 @@ class SpoiledTestClass(unittest.TestCase):
     def get_edit_page(self):
         self.client.get('/user_profile/0/edit')
 
-    def get_edit_profile(self, title, form):
+    def get_edit_profile(self):
         self.client.get('/edit_profile')
-        self.client.get('/edit_profile', content_type='application/x-www-form-urlencoded', 
-                follow_redirects=True,
-                data={'title': title, 'form': form})
 
     def rate_movie(self, mid, rate):
         return self.client.post('/movie/{}'.format(mid), content_type='application/x-www-form-urlencoded', 
@@ -60,7 +58,8 @@ class SpoiledTestClass(unittest.TestCase):
         self.get_user_profile()
         self.add_friends()
         self.get_edit_page()
-        self.get_edit_profile('', [])
+        #valid form test
+        self.get_edit_profile()
         self.other_profile(0)
         self.other_profile(3)
         self.other_profile(8)
@@ -84,6 +83,11 @@ class SpoiledTestClass(unittest.TestCase):
     def test_session_rate_movie(self):
         #not logged in case
         self.rate_movie('tt7634968', 1)
+
+    def test_friend(self):
+        self.login('testing9323379', 'asdfbasdf')
+        self.remove_friend()
+        self.logout()
 
 if __name__ == "__main__":
     unittest.main()
