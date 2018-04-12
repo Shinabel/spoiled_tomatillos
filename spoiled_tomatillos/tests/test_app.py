@@ -2,6 +2,7 @@ import unittest
 import os
 from config import Config
 import pytest
+import random
 #import ipdb
 
 '''
@@ -136,8 +137,19 @@ def test_user_search(client):
     client.post('/search', content_type="application/x-www-form-urlencoded",
             data={'search': 'admin'})
 
-def test_register(client):
+###
+# Test registration
+###
+
+def test_base_register(client):
     client.post('/register')
+
+def test_valid_register(tester_client):
+    r = random.randint(1, 9999999)
+    tester_client.post('/register',
+            content_type="application/x-www-form-urlencoded",
+            data={'username': "testing{}".format(r), 'email': "{}@adfasdf.com".format(r),
+                'password': "asdfbasdf", 'confirm': "asdfbasdf", "accept_tos": "y"})
 
 def test_user_profile(client):
     client.get('/user_profile')
