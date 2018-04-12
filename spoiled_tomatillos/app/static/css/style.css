@@ -471,7 +471,7 @@ textarea.post-textarea {
 
 .rating {
   float:left;
-  width:300px;
+  width:160px;
 }
 .rating span { float:right; position:relative; }
 .rating span input {
@@ -497,7 +497,7 @@ textarea.post-textarea {
 .rating span:hover label,
 .rating span.checked label,
 .rating span.checked ~ span label {
-  background:#F90;
+  background:#D55121;
   color:#FFF;
 }
 

@@ -16,19 +16,19 @@
             <div class="col-sm-8">
                 {% if current_user_favorite is none %}
                 <div>
-                    <i class="fa fa-heart-o favorite"></i>
+                    Favorite: <i class="fa fa-heart-o favorite"></i>
                 </div>  
                 {% else %}
                 <div>
-                    <i class="fa fa-heart unfavorite"></i>
+                    Favorite: <i class="fa fa-heart unfavorite"></i>
                 </div>
                 {% endif %}
                 <p>{{ desc }}</p>
             </div>
         </div>
         <div class="row">
+            <br></br>
             <div class="col-sm-4">
-
                 <div class="rating">
                         <span><input type="radio" name="rating" id="str5" value="5"><label for="str5"></label></span>
                         <span><input type="radio" name="rating" id="str4" value="4"><label for="str4"></label></span>
@@ -36,7 +36,7 @@
                         <span><input type="radio" name="rating" id="str2" value="2"><label for="str2"></label></span>
                         <span><input type="radio" name="rating" id="str1" value="1"><label for="str1"></label></span>
                 </div>
-                <p>IMDB Rating: {{ rating }} out of 10   ({{ rating_count }} votes)</p>
+                <br></br>
                 <div class="row">
                     <p>Average Spoiled Tomatillos rating: {{ user_rating }}</p>
                  {% if current_user_rating is not none %}
@@ -44,6 +44,9 @@
                         your score: {{ current_user_rating }}
                     </p>
                 {% endif %}
+                </div>
+                <div class="row">
+                <p>IMDB Rating: {{ rating }} out of 10   ({{ rating_count }} votes)</p>
                 </div>
             </div>
         </div>
