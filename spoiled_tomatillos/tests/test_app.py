@@ -3,6 +3,7 @@ import os
 from config import Config
 import pytest
 import random
+from app.token import generate_confirmation_token, confirm_token
 #import ipdb
 
 '''
@@ -161,6 +162,39 @@ def test_movie_page(client):
 def test_models(client):
     from app import models
     u = models.User("test", "test@test.com", "test", True)
+
+def test_reset_password(client):
+    resp = client.get('/reset_password', content_type="application/x-www-form-urlencoded",
+            data={'email': "testing123@adfadsf.com"})
+    tok = generate_confirmation_token("testing123@adfadsf.com")
+    client.post("/reset_password/new/{}".format(tok), content_type="application/x-www-form-urlencoded",
+            data={'password': "abcdefg", 'confirm': "abcdefg"})
+    client.post("/reset_password/new/{}".format("asdf"), content_type="application/x-www-form-urlencoded",
+            data={'password': "abcdefg", 'confirm': "abcdefg"})
+    client.post("/reset_password/new/{}".format("tok"), content_type="application/x-www-form-urlencoded",
+            data={'password': "abcdefg"})
+
+def test_reset_password_fail_validate(client):
+    resp = client.get('/reset_password', content_type="application/x-www-form-urlencoded",
+            data={'email': "testing123@adfadsf.com"})
+    tok = generate_confirmation_token("testing123@adfadsf.com")
+    client.post("/reset_password/new/{}".format(tok), content_type="application/x-www-form-urlencoded",
+            data={'password': "12345", 'confirm': "abcdefg"})
+
+def test_confirm_email(client):
+    tok = generate_confirmation_token("testing123@adfadsf.com")
+    client.get("/confirm/{}".format(tok))
+
+def test_new_confirm_email(client):
+    tok2 = generate_confirmation_token("{}@blah.com".format(random.randint(1,9999999)))
+    client.get("/confirm/{}".format(tok2))
+
+def test_bad_confirm_email(client):
+    client.get("/confirm/{}".format("adsf"))
+
+def test_fail_reset_password(client):
+    client.get('/reset_password', content_type="application/x-www-form-urlencoded",
+            data={'email': "123@ag9s8g.com"})
 
 ###
 # Test token file
