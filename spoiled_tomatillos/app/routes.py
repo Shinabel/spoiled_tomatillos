@@ -349,9 +349,9 @@ def change_password(token):
                 flash('Password successfully updated.', 'success')
                 return redirect(url_for('login'))
 
-            else:
-                flash('Password change was unsuccessful.', 'danger')
-                return redirect(url_for('login'))
+            # else:
+            #     flash('Password change was unsuccessful.', 'danger')
+            #     return redirect(url_for('login'))
         else:
             flash('Please enter your new password.', 'success')
             return render_template('change_password.html', form=form)

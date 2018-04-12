@@ -145,12 +145,16 @@ def test_user_search(client):
 def test_base_register(client):
     client.post('/register')
 
-def test_valid_register(tester_client):
+def test_valid_register_with_confirm_email(tester_client):
     r = random.randint(1, 9999999)
+    em = "{}@adfasdf.com".format(r)
     tester_client.post('/register',
             content_type="application/x-www-form-urlencoded",
-            data={'username': "testing{}".format(r), 'email': "{}@adfasdf.com".format(r),
+            data={'username': "testing{}".format(r), 'email': em,
                 'password': "asdfbasdf", 'confirm': "asdfbasdf", "accept_tos": "y"})
+    tok = generate_confirmation_token(em)
+    tester_client.get("/confirm/{}".format(tok))
+
 
 def test_user_profile(client):
     client.get('/user_profile')
@@ -190,7 +194,7 @@ def test_new_confirm_email(client):
     client.get("/confirm/{}".format(tok2))
 
 def test_bad_confirm_email(client):
-    client.get("/confirm/{}".format("adsf"))
+    client.get("/confirm/{}".format("InRlc3RAdGVzdC5jb20i.DbBixg.8adBzEtfYfbE1I3rUBi05nTEo6s"))
 
 def test_fail_reset_password(client):
     client.get('/reset_password', content_type="application/x-www-form-urlencoded",

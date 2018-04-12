@@ -31,12 +31,16 @@ class SpoiledTestClass(unittest.TestCase):
 
     def other_profile(self, pid):
         self.client.get('/user_profile/{}'.format(pid))
+        
+    def get_user_profile(self):
+        self.client.get('/user_profile')
 
     def get_edit_page(self):
         self.client.get('/user_profile/0/edit')
 
     def test_session(self):
         self.login('admin', 'admin')
+        self.get_user_profile()
         self.add_friends()
         self.get_edit_page()
         self.other_profile(0)
