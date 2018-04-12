@@ -13,10 +13,10 @@
 <section id="name_image">
     {% if user == current_user %}
     <input type="button" value="Edit Profile" onclick="window.location.href='{{ url_for('edit_profile') }}'" />
-    {% endif %}
     <form>
       <input type="button" value="Change Password" onclick="window.location.href='{{url_for('reset_password')}}'" />
     </form>
+    {% endif %}
   <tr valign="top">
   <h1>User: {{ user.username }}</h1>
 <td><img src="{{ user.avatar(128) }}"></td>
@@ -26,6 +26,14 @@
   <h1>About Me</h1>
   <p>{{ user.about_me }}</p>
   {% endif %}
+</section>
+                <section id="friends">
+  <h1>Friends</h1>
+            {% if friend_list is not none %}
+                {% for f in friend_list %}
+                <p><a href="/user_profile/{{ f.user_ID }}">{{ f.username }}</a></p>
+                {% endfor %}
+            {% endif %}
 </section>
 <section id="movies">
     {% if friend == -1 %}
@@ -39,23 +47,17 @@
     {% else %}
     {% endif %}
     {% if user.favorite_movies %}
-    <h1>Favorite Movies</h1>
+    <h1>Hobbies</h1>
     <p>{{ user.favorite_movies }}</p>
     {% endif %}
 </section>
-        <section id="friends">
-  <h1>Friends</h1>
-            {% if friend_list is not none %}
-                {% for f in friend_list %}
-                <p><a href="/user_profile/{{ f.user_ID }}">{{ f.username }}</a></p>
-                {% endfor %}
-            {% endif %}
-  <p class="text-left"><a href="#">See all</a></p>
-</section>
-<section id="reviews">
-  <h1>Reviews</h1>
-  <p class="text-left"><a href="#">See all</a></p>
+<section id="favorites">
+   <h1>Favorite Movies</h1>
+    {% for rec in favorites %}
+            <p><a href="/movie/{{ rec[0] }}">{{ rec[1] }}</a></p>
+          {% endfor %}
 </section>
 </div>
 </body>
 {% endblock %}
+

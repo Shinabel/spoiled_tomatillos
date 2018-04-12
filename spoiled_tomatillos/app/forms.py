@@ -117,5 +117,4 @@ class EditProfileForm(Form):
 
         user_name = UserInfo.query.filter(and_(UserInfo.username == self.username.data, UserInfo.user_ID != current_user.user_ID)).first()
         check_username = self.check_username_registered(user_name)
-        print('got here')
         return init_valid and check_username

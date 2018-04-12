@@ -18,7 +18,7 @@
             {% endfor %}
         </p>
         <p>
-            {{ form.favorite_movies.label }}<br>
+            Hobbies<br>
             {{ form.favorite_movies(cols=50, rows=4) }}<br>
             {% for error in form.favorite_movies.errors %}
             <span style="color: red;">[{{ error }}]</span>
