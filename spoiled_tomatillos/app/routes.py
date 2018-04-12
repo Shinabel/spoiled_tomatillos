@@ -359,19 +359,18 @@ def movie_page(movie_id):
 
 @app.route('/confirm/<token>')
 def confirm_email(token):
-    try:
-        email = confirm_token(token)
-    except:
-        flash('The confirmation link is invalid or has expired.', 'danger')
+    email = confirm_token(token)
     user = UserInfo.query.filter_by(email=email).first_or_404()
     if user.confirmed:
         flash('Email provided is already on use. Please login or register with different email.', 'success')
-    else:
+    if user.email == email:
         user.confirmed = True
         user.confirmed_date = datetime.datetime.now()
         db.session.add(user)
         db.session.commit()
         flash('Account confirmed. Thanks!', 'success')
+    else:
+        flash('The confirmation link is invalid or has expired.', 'danger')
     return redirect(url_for('login'))
 
 
@@ -424,9 +423,9 @@ def change_password(token):
                 flash('Password successfully updated.', 'success')
                 return redirect(url_for('login'))
 
-            else:
-                flash('Password change was unsuccessful.', 'danger')
-                return redirect(url_for('login'))
+            # else:
+            #     flash('Password change was unsuccessful.', 'danger')
+            #     return redirect(url_for('login'))
         else:
             flash('Please enter your new password.', 'success')
             return render_template('change_password.html', form=form)

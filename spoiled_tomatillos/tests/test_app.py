@@ -64,6 +64,7 @@ def test_user_info_methods(client):
     ui.get_id()
     ui.is_authenticated()
     ui.is_anonymous()
+    ui.__repr__()
 
 def test_email(client):
     from app import email
@@ -145,19 +146,19 @@ def test_user_search(client):
 def test_base_register(client):
     client.post('/register')
 
-def test_valid_register(tester_client):
+def test_valid_register_with_confirm_email(tester_client):
     r = random.randint(1, 9999999)
+    em = "{}@adfasdf.com".format(r)
     tester_client.post('/register',
             content_type="application/x-www-form-urlencoded",
-            data={'username': "testing{}".format(r), 'email': "{}@adfasdf.com".format(r),
+            data={'username': "testing{}".format(r), 'email': em,
                 'password': "asdfbasdf", 'confirm': "asdfbasdf", "accept_tos": "y"})
+    tok = generate_confirmation_token(em)
+    tester_client.get("/confirm/{}".format(tok))
+
 
 def test_user_profile(client):
     client.get('/user_profile')
-
-def test_movie_page(client):
-    pass
-#    client.get('/movie/<movie_id>')
 
 def test_models(client):
     from app import models
@@ -190,7 +191,7 @@ def test_new_confirm_email(client):
     client.get("/confirm/{}".format(tok2))
 
 def test_bad_confirm_email(client):
-    client.get("/confirm/{}".format("adsf"))
+    client.get("/confirm/{}".format("InRlc3RAdGVzdC5jb20i.DbBixg.8adBzEtfYfbE1I3rUBi05nTEo6s"))
 
 def test_fail_reset_password(client):
     client.get('/reset_password', content_type="application/x-www-form-urlencoded",
@@ -233,3 +234,14 @@ def test_pdb(client):
             pytest.set_trace()
     except:
         pass
+
+
+def test_edit_profile(tester_client):
+    tester_client.post('/login', content_type='application/x-www-form-urlencoded',
+        follow_redirects=True,
+        data={'username': 'admin', 'password': 'admin'})
+    tester_client.post('/edit_profile',
+        content_type='application/x-www-form-urlencoded',
+        follow_redirects=True,
+        data={'username':'admin', 'about_me':'', 'favorite_movies':'', 'submit':'yes'})
+    tester_client.post('/logout')

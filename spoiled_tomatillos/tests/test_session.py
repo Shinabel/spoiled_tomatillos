@@ -4,6 +4,7 @@ from config import Config
 import pytest
 from app import app
 
+
 class SpoiledTestClass(unittest.TestCase):
 
     def setUp(self):
@@ -31,18 +32,60 @@ class SpoiledTestClass(unittest.TestCase):
 
     def other_profile(self, pid):
         self.client.get('/user_profile/{}'.format(pid))
+        
+    def get_user_profile(self):
+        self.client.get('/user_profile')
+
+    def get_movie_page(self, mid):
+        self.client.get('/movie/{}'.format(mid))
+
+    def get_user_profile(self):
+        self.client.get('/user_profile')
 
     def get_edit_page(self):
         self.client.get('/user_profile/0/edit')
 
+    def get_edit_profile(self):
+        self.client.get('/edit_profile')
+
+    def rate_movie(self, mid, rate):
+        return self.client.post('/movie/{}'.format(mid), content_type='application/x-www-form-urlencoded', 
+                follow_redirects=True,
+                data={'user-rating': rate})
+
     def test_session(self):
         self.login('admin', 'admin')
+        self.get_user_profile()
         self.add_friends()
         self.get_edit_page()
+        #valid form test
+        self.get_edit_profile()
         self.other_profile(0)
         self.other_profile(3)
         self.other_profile(8)
+        #no genre
+        self.get_movie_page('tt0000502')
+        #image link available
+        self.get_movie_page('tt7783322')
         self.remove_friend()
+        self.remove_friend()
+        self.logout()
+
+    def test_session_movie(self):
+        self.login('emailtest', 'test')
+        #have rated
+        self.get_movie_page('tt7783322')
+        self.get_movie_page('tt7634968')
+        self.rate_movie('tt7634968', 1)
+        self.rate_movie('abel', 1)
+        self.logout()
+
+    def test_session_rate_movie(self):
+        #not logged in case
+        self.rate_movie('tt7634968', 1)
+
+    def test_friend(self):
+        self.login('testing9323379', 'asdfbasdf')
         self.remove_friend()
         self.logout()
 
