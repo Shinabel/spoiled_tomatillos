@@ -268,11 +268,10 @@ def movie_page(movie_id):
                     db.session.add(
                         UserRatings(user_ID=current_user.get_id(), movieId=movie_id, ratings=request.form['user-rating']))
                     db.session.commit()
-                    flash('Your rating has been recorded.', 'info')
                 else:
                     original_rating.ratings = request.form['user-rating']
                     db.session.commit()
-                    flash('Your rating has been updated.', 'info')
+                flash('Your rating has been updated.', 'info')
             else:
                 if request.form['favorite'] == 'true':
                     try:
@@ -292,8 +291,6 @@ def movie_page(movie_id):
                         flash('This movie has been unfavorited.', 'info')
                     except:
                         flash('This movie has already been unfavorited.', 'warning')
-        else:
-            flash('You must be signed in to rate movies.', 'warning')
 
     movie = TitleBasic.query.filter_by(id=movie_id).first()
     rating = Ratings.query.filter_by(movieId=movie_id).first()
