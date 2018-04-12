@@ -67,7 +67,8 @@ class UserInfo(db.Model, UserMixin):
     confirmed = db.Column('confirmed', db.Boolean, nullable=False, default=False)
     confirmed_date = db.Column('confirmed_date', db.DateTime)
     password_token = db.Column('password_token', db.Unicode)
-    about_me = db.Column(db.String(140))
+    about_me = db.Column(db.String(255))
+    favorite_movies =db.Column(db.String(255))
 
     def is_active(self):
         return True

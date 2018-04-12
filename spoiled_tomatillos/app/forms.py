@@ -86,5 +86,6 @@ class ChangePasswordForm(FlaskForm):
 
 class EditProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
-    about_me = TextAreaField('About me', validators=[Length(min=0, max=255)])
+    about_me = TextAreaField('About Me', validators=[Length(min=0, max=255)])
+    favorite_movies = TextAreaField('Favorite Movies', validators=[Length(min=0, max=255)])
     submit = SubmitField('Submit')

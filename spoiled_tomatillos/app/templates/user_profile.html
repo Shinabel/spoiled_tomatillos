@@ -38,8 +38,10 @@
     </form>
     {% else %}
     {% endif %}
-  <h1>Favorite Movies</h1>
-  <p class="text-left"><a href="#">See all</a></p>
+    {% if user.favorite_movies %}
+    <h1>Favorite Movies</h1>
+    <p>{{ user.favorite_movies }}</p>
+    {% endif %}
 </section>
         <section id="friends">
   <h1>Friends</h1>
@@ -52,10 +54,6 @@
 </section>
 <section id="reviews">
   <h1>Reviews</h1>
-  <p class="text-left"><a href="#">See all</a></p>
-</section>
-<section id="groups">
-  <h1>Groups</h1>
   <p class="text-left"><a href="#">See all</a></p>
 </section>
 </div>
